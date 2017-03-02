@@ -1,0 +1,359 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ALTEON 耀腾智能机电监控云平台 - 设备数据</title>
+    <meta name="keywords" content="智能,监控,云平台,机电,耀腾,太阳能发电,BAS,BA,气体监控">
+    <meta name="description" content="
+          耀腾智能机电监控云平台是一个完全响应式，基于云端最新版本开发的工业机电监控系统，采用了modbus、tcp等传输协议方式与现场PLC系统对接，同时运行在pc和移动终端">
+    <link href="/Content/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="/Content/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="/Content/css/animate.min.css" rel="stylesheet">
+    <link href="/Content/css/style.min.css?v=3.0.0" rel="stylesheet">
+    <link href="~/Content/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/css/plugins/switchery/switchery.css" rel="stylesheet" />
+    
+</head>
+<body class="gray-bg">
+    <div class="ibox-content" style="margin-left:0.5%;">
+        <div class="">
+            <a id="showWindow1" data-toggle="modal" class="btn btn-primary" href="#modal-form1">添加数据</a>
+        </div>
+        <table id="equipmentList" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+                <tr>
+                    <th>排序</th>
+                    <th>设备</th>
+                    <th>标识</th>
+                    <th>名称</th>
+                    <th>数值</th>
+                    <th>单位</th>
+                    <th>时间</th>
+                    <th>查看图表</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="ajaxData">
+                @*异步加载数据*@
+            </tbody>
+        </table>
+    </div>
+    <!--添加数据窗口-->
+    <div id="modal-form1" class="modal fade" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <h3 id="title" class="m-t-none m-b">添加数据</h3>
+                        <form role="form">
+                            <div class="form-group">
+                                <label>所属设备：</label>
+                                <select id="equipmentId1" class="form-control m-b"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>排序：</label>
+                                <input id="sorting1" type="number" placeholder="请输入序号" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>名称：</label>
+                                <input id="name1" type="text" placeholder="请输入数据名称" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>标识：</label>
+                                <input id="mark1" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>单位：</label>
+                                <input id="unit1" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>公式：显示值=原数据*A+B</label>
+                                <div>
+                                    <label style="float:left">A=</label><input id="a1" type="text" value="1" class="form-control" style="float:left;width:30%" />
+                                </div>
+                                <div>
+                                    <label style="float:left">B=</label><input id="b1" type="text" value="0" class="form-control" style="float: left; width: 30%" />
+                                </div>
+                            </div>
+                            <div>
+                                @*<input type="hidden" value="" id="equipmentId1" />*@
+                                <button class="btn btn-sm btn-primary pull-right m-t-n-xs" style="margin-right:2%" type="button" onclick="SaveData(1)">
+                                    <strong>保存</strong>
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--编辑数据窗口-->
+    <div id="modal-form" class="modal fade" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <h3 id="title" class="m-t-none m-b">修改数据</h3>
+                        <form role="form">
+                            <div class="form-group">
+                                <label>排序：</label>
+                                <input id="sorting" type="number" placeholder="请输入序号" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>名称：</label>
+                                <input id="name" type="text" placeholder="请输入数据名称" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>标识：</label>
+                                <input id="mark" disabled="disabled" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>单位：</label>
+                                <input id="unit" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>公式：显示值=原数据*A+B</label>
+                                <div>
+                                    <label style="float:left">A=</label><input id="a" type="text" value="1" class="form-control" style="float:left;width:30%" />
+                                </div>
+                                <div>
+                                    <label style="float:left">B=</label><input id="b" type="text" value="0" class="form-control" style="float: left; width: 30%" />
+                                </div>
+                            </div>
+                            <div>
+                                <input type="hidden" value="" id="equipmentId" />
+
+                                <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="button" onclick="DeleteData()">
+                                    <strong>删除</strong>
+                                </button>&nbsp;
+                                <button class="btn btn-sm btn-primary pull-right m-t-n-xs" style="margin-right:2%" type="button" onclick="SaveData()">
+                                    <strong>保存</strong>
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a id="showWindow" data-toggle="modal" style="display:none" href="#modal-form">添加数据</a>
+    <!-- 全局js -->
+    <script src="~/Content/js/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+
+    <script src="/Content/js/plugins/jeditable/jquery.jeditable.js"></script>
+    <!-- Data Tables -->
+    <script src="/Content/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="/Content/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <!-- 自定义js -->
+    <script src="/Content/js/content.min.js?v=1.0.0"></script>
+    <script src="~/Content/js/plugins/switchery/switchery.js"></script>
+    <!-- Page-Level Scripts -->
+    <script>
+    var count = 0;
+    var page = { pageIndex: 1, pageSize: 9999, totalCount: 0, startNum: 0, endNum: 0, totalPage: 0 };
+    $(document).ready(function () {
+        $("#equipmentList").dataTable({
+            "bLengthChange": false,//每页显示多少数据
+            "bFilter": false, //过滤功能（查询）
+            "ordering": false//禁用排序
+        });
+        $.ajax({
+            url: 'AjaxGetEquipmentList',
+            type: 'post',
+            dataType: 'json',
+            data: { userKey: '@ViewBag.ownerId', pageIndex: 1, pageSize: 99999 },
+            success: function (d) {
+                if (d.Error == 0) {
+                    var _html = '';
+                    for (var i = 0; i < d.Data.length; i++) {
+                        _html += "<option value='" + d.Data[i].Id + "'>" + d.Data[i].Name + "</option> ";
+                    }
+                    $("#equipmentId1").html("<option value='0'>请选择</option> " + _html);
+                }
+            }
+        });
+
+        AjaxLoadList();
+        $("#equipmentList_next").unbind();
+        $("#equipmentList_previous").unbind();
+        $("#equipmentList_next").click(function () {
+            page.pageIndex++;
+            AjaxLoadList();
+        });
+        $("#equipmentList_previous").click(function () {
+            page.pageIndex--;
+            AjaxLoadList();
+        });
+        //setInterval(function () {
+        //    AjaxLoadList();
+        //}, 1000 * 10)
+    });
+
+
+
+
+
+    function AjaxLoadList() {
+        $.ajax({
+            url: "/usercenter/GetDataList",
+            data: { ownerId: '@ViewBag.ownerId' },
+            dataType: "json",
+            type: "post",
+            success: function (data) {
+                if (data.Error == 0) {
+                    var obj = data.Data;
+                    var html = "";
+                    for (var i = 0; i < obj.length; i++) {
+                        html += "<tr class='gradeA'><td>" + obj[i].SortingIndex + "</td><td>" + obj[i].EquipmentName + "</td><td><a href='#' onclick='ShowWindow(" + obj[i].Id + ")'>" + obj[i].Mark + "</a></td><td>" + obj[i].Name + "</td><td>" + obj[i].Value + "</td><td>" + obj[i].Unit + "</td><td>" + obj[i].CreateTime + "</td><td><a href='/usercenter/DataChart?equipmentId=" + obj[i].EquipmentId + "&Mark=" + obj[i].Mark + "&Name=" + obj[i].EquipmentName + "&Unit=" + obj[i].Unit + "'>查看图表</a></td>";
+                        if (obj[i].State == 0) {
+                            html += "<td onclick='ChangeEquipmentState(1," + obj[i].Id + ",'" + obj[i].Mark + "')'><input  type='checkbox' class='js-switch' /></td></tr>";
+                        }
+                        else if (obj[i].State == 1) {
+                            html += "<td onclick='ChangeEquipmentState(0," + obj[i].Id + ",'" + obj[i].Mark + "')'><input  type='checkbox' class='js-switch' checked /></td></tr>";
+                        }
+                    }
+                    $("#ajaxData").html(html);
+                    var c = $(".js-switch");
+                    for (var i = 0; i < c.length; i++) {
+                        var b = new Switchery(c[i], { color: "#1AB394" });
+                    }
+                    $("#equipmentList_info").attr("style", "display:none");
+                    $("#equipmentList_previous").attr("style", "display:none");
+                    $("#equipmentList_next").attr("style", "display:none");
+                }
+            },
+            error: function (e) {
+                //alert("服务器繁忙，请稍后再试");
+            }
+        });
+    }
+    
+        function ChangeEquipmentState(_state, _id) {
+            $.ajax({
+                url: 'AjaxChangeEquipmentDataState',
+                type: 'post',
+                dataType: 'json',
+                data: { state: _state, eId: _id },
+                success: function (r) {
+                    if (r.Error == 1) {
+                        alert(r.Msg);
+                    }
+                }
+            });
+        }
+
+    </script>
+
+    <script>
+        function ShowWindow(id) {
+            $.ajax({
+                url: "GetDataById",
+                data: { id: id },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        $("#equipmentId").val(data.Data.EquipmentId);
+                        $("#sorting").val(data.Data.SortingIndex);
+                        $("#name").val(data.Data.Name);
+                        $("#unit").val(data.Data.Unit);
+                        $("#mark").val(data.Data.Mark);
+                        $("#showWindow").click();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function (e) {
+                    //alert(e.error);
+                }
+            });
+        }
+        
+        function SaveData(_flag) {
+            var _equipmentId;
+            var _mark;
+            var _name;
+            var _unit;
+            var _sortingIndex;
+            var _method;
+            if (_flag > 0) {
+                _equipmentId = $("#equipmentId1").val();
+                _mark = $("#mark1").val().toUpperCase();
+                _name = $("#name1").val();
+                _unit = $("#unit1").val();
+                _sortingIndex = $("#sorting1").val();
+                _method = $("#a1").val() + "+" + $("#b1").val();
+            }
+            else {
+                _equipmentId = $("#equipmentId").val();
+                _mark = $("#mark").val().toUpperCase();
+                _name = $("#name").val();
+                _unit = $("#unit").val();
+                _sortingIndex = $("#sorting").val();
+                _method = $("#a").val() + "+" + $("#b").val();
+            }
+            if (_equipmentId == 0) {
+                return;
+            }
+            $.ajax({
+                url: "EditDataById",
+                data: { EquipmentId: _equipmentId, Name: _name, Mark: _mark, Method: _method, Unit: _unit, SortingIndex: _sortingIndex, flag: _flag },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        $("#equipmentId").val();
+                        $("#sorting").val();
+                        $("#name").val();
+                        $("#mark").val();
+                        //$("#number").val();
+                        AjaxLoadList();
+                        $("#modal-form").click();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function (e) {
+                    alert(e.error);
+                }
+            });
+
+        }
+
+        function DeleteData() {
+            var _equipmentId = $("#equipmentId").val();
+            var _mark = $("#mark").val();
+            //alert(_equipmentId + "   " + _mark); return;
+            $.ajax({
+                url: "DeleteDataByEquipmentId",
+                data: { equipmentId: _equipmentId, mark: _mark },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        AjaxLoadList();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function (e) {
+                    alert(e.error);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
+

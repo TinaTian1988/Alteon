@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ALTEON 耀腾智能机电监控云平台 - 历史数据走势</title>
+    <meta name="keywords" content="智能,监控,云平台,机电,耀腾,太阳能发电,BAS,BA,气体监控">
+    <meta name="description" content="
+          耀腾智能机电监控云平台是一个完全响应式，基于云端最新版本开发的工业机电监控系统，采用了modbus、tcp等传输协议方式与现场PLC系统对接，同时运行在pc和移动终端">
+    <link href="/Content/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="/Content/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+
+    <!-- morris -->
+    <link href="/Content/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+
+    <link href="/Content/css/animate.min.css" rel="stylesheet">
+    <link href="/Content/css/style.min.css?v=3.0.0" rel="stylesheet">
+    <style>
+        .choose {
+            display:inline-block;
+            margin-left:1%
+        }
+    </style>
+</head>
+<body class="gray-bg" style="margin-left:1%;margin-right:1%">
+    <div class="choose">
+        @if (ViewData["equipments"] != null)
+        {
+            var list = (List<Alteon.Model.Api.Extension.Equipment>)ViewData["equipments"];
+            <select class="form-control m-b" id="equipments">
+                <option value="0">--请选择设备--</option>
+                @foreach (var item in list)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        }
+    </div>
+    <div class="choose">
+        <select class="form-control m-b" id="datas">
+            <option value="0">--请选择数据--</option>
+        </select>
+    </div>
+
+    <div class="choose">
+        <a data-toggle="modal" class="btn btn-outline btn-info" href="javascript:void(0)" span="1" onclick="chooseTimeSpan(this)">当前小时</a>
+    </div>
+    @*<div class="choose">
+        <a data-toggle="modal" class="btn btn-outline btn-warning" href="javascript:void(0)" span="2" onclick="chooseTimeSpan(this)">上个小时</a>
+    </div>*@
+    <div class="choose">
+        <a data-toggle="modal" class="btn btn-outline btn-danger" href="javascript:void(0)" span="3" onclick="chooseTimeSpan(this)">今天</a>
+    </div>
+    <div class="form-group" style="display:none">
+        <label class="col-sm-2 control-label">外部js调用：</label>
+        <div class="col-sm-10">
+            <input id="hello" class="laydate-icon form-control layer-date">
+        </div>
+    </div>
+    <div class="choose">
+        <input placeholder="开始日期" class="form-control layer-date" id="start" style="margin-top:-4px">
+    </div>-
+    <div class="choose">
+        <input placeholder="结束日期" class="form-control layer-date" id="end" style="margin-top:-4px">
+    </div>
+
+
+    <div class="choose">
+        <button id="search" type="button" class="btn btn-primary">查询</button>
+    </div>
+
+    @*<div id="chartContainer">*@
+    <div id="chart"></div>
+    @*</div>*@
+    <!-- 全局js -->
+    <script src="~/Content/js/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js?v=3.4.0"></script>
+    
+
+    <!-- Morris-->
+    <script src="~/Content/js/plugins/morris/morris.js"></script>
+    <script src="~/Content/js/plugins/morris/raphael-2.1.0.min.js"></script>
+
+    <script>
+        var _equipmentId;
+        var _dataMark;
+        var _timeSpan;
+        var _beginTime;
+        var _endTime;
+        var _currentOption;
+
+        $('#equipments').change(function () {
+            _equipmentId = $(this).children('option:selected').val();
+            if (_equipmentId > 0) {
+                $.ajax({
+                    url: "GetDataListByEquipmentId",
+                    data: { euipmentId: _equipmentId },
+                    dataType: "json",
+                    type: "post",
+                    success: function (d) {
+                        if (d.Error == 0) {
+                            var _data = d.Data;
+                            var _html = '<option value="0">--请选择数据--</option>';
+                            for (var i = 0; i < _data.length; i++) {
+                                _html += '<option value="' + _data[i].Mark + '">' + _data[i].Mark + '--' + _data[i].Name + '</option>';
+                            }
+                            $("#datas").html(_html);
+                        }
+                        else {
+                            alert("该设备暂无数据");
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#datas").change(function () {
+            _dataMark = $(this).children('option:selected').val();
+        });
+
+        function chooseTimeSpan(a) {
+            _timeSpan = $(a).attr("span");
+            _currentOption = 1;
+        }
+
+        $("#search").click(function () {
+            $("#chart").children().remove();
+            if (_dataMark == "" || _equipmentId == "") {
+                return;
+            }
+
+            $.ajax({
+                url: "GetAllDataChart",
+                data: { equipmentId: _equipmentId, mark: _dataMark, timeSpan: _timeSpan, beginTime: _beginTime, endTime: _endTime, currentOption: _currentOption },
+                type: "post",
+                success: function (data) {
+                    var _data = [];
+                    for (var i = 0; i < data.length; i++) {
+                        _data.push({
+                            time: data[i].time,
+                            value: data[i].value
+                        });
+                    }
+                    Morris.Line({
+                        element: "chart",
+                        data: _data,
+                        xkey: "time",
+                        ykeys: ["value"],
+                        resize: !0,
+                        lineWidth: 4,
+                        labels: ["Value"],
+                        lineColors: ["#1ab394"],
+                        pointSize: 0,
+                        hoverCallback: function (index, options, default_content, row) {
+                            $("div[class='morris-hover morris-default-style']").html(default_content);
+                            return default_content;
+                        }
+                    });
+                }
+            });
+        });
+
+
+    </script>
+
+    <script src="~/Content/js/plugins/layer/laydate/laydate.js"></script>
+    <script>
+        laydate({
+            elem: "#hello",
+            event: "focus"
+        });
+        var start = {
+            elem: "#start",
+            event: 'focus',
+            format: "YYYY-MM-DD hh:mm:ss",
+            min: "2000-01-01 00:00:00",
+            max: "2099-06-16 23:59:59",
+            istime: true,
+            istoday: false,
+            choose: function (datas) {
+                end.min = datas;
+                end.start = datas
+                _beginTime = datas;
+            }
+        };
+        var end = {
+            elem: "#end",
+            event: 'focus',
+            format: "YYYY-MM-DD hh:mm:ss",
+            min: "2000-01-01 00:00:00",
+            max: "2099-06-16 23:59:59",
+            istime: true,
+            istoday: false,
+            choose: function (datas) {
+                start.max = datas
+                _endTime = datas;
+                _currentOption = 2;
+            }
+        };
+        laydate(start);
+        laydate(end);
+
+
+    </script>
+</body>
+</html>

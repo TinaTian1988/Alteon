@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewBag.Title = "历史走势记录";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="update" style="display:none">
+    <div class="form-group" style="display:none">
+        <label class="col-sm-2 control-label">外部js调用：</label>
+        <div class="col-sm-10">
+            <input id="hello" class="laydate-icon form-control layer-date">
+        </div>
+    </div>
+    <div style="text-align:center;margin-top:3%"><h3>查询条件</h3></div>
+    <div class="form-group">
+        @if (ViewData["equipments"] != null)
+        {
+            var list = (List<Alteon.Model.Api.Extension.Equipment>)ViewData["equipments"];
+            <select class="form-control m-b" id="equipments">
+                <option value="0">--请选择设备--</option>
+                @foreach (var item in list)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        }
+    </div>
+    <div class="form-group">
+        <select class="form-control m-b" id="datas">
+            <option value="0">--请选择数据--</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <a data-toggle="modal" class="btn-outline btn-info" href="javascript:void(0)" span="1" onclick="chooseTimeSpan(this)">当前小时</a>
+        <a data-toggle="modal" class="btn-outline btn-danger" href="javascript:void(0)" span="3" onclick="chooseTimeSpan(this)">今天</a></div>
+    @*<div class="form-group">
+        <a data-toggle="modal" class="btn btn-outline btn-danger" href="javascript:void(0)" span="3" onclick="chooseTimeSpan(this)">今天</a>
+    </div>*@
+    <div class="form-group">
+        <input placeholder="开始日期" class="form-control layer-date" id="start" style="width:25%;float:left">
+        <input placeholder="结束日期" class="form-control layer-date" id="end" style="width:25%;float:left">
+    </div>
+    
+    <div style="text-align: right; margin-top: 13%">
+        <strong onclick="Search()" style=" margin-right:6%;color:#5d8af6;">查询</strong>
+    </div>
+
+</div>
+
+<a href="#" class="small-nav-icon search-nav" onclick="showWindow()"></a>
+<h5 id="contentName">@Request.QueryString["name"] @Request.QueryString["mark"] @Request.QueryString["markName"] 历史走势</h5>
+<h6 id="dataUnit">单位：@Request.QueryString["unit"]</h6>
+<div id="chart"></div>
+
+@section iScript{
+<script src="~/Content/js/plugins/layer/laydate/laydate.js"></script>
+<script>
+    laydate({
+        elem: "#hello",
+        event: "focus"
+    });
+    var start = {
+        elem: "#start",
+        event: 'focus',
+        format: "YYYY-MM-DD hh:mm:ss",
+        min: "2000-01-01 00:00:00",
+        max: "2099-06-16 23:59:59",
+        istime: true,
+        istoday: false,
+        choose: function (datas) {
+            end.min = datas;
+            end.start = datas
+            _beginTime = datas;
+        }
+    };
+    var end = {
+        elem: "#end",
+        event: 'focus',
+        format: "YYYY-MM-DD hh:mm:ss",
+        min: "2000-01-01 00:00:00",
+        max: "2099-06-16 23:59:59",
+        istime: true,
+        istoday: false,
+        choose: function (datas) {
+            start.max = datas
+            _endTime = datas;
+            _currentOption = 2;
+        }
+    };
+    laydate(start);
+    laydate(end);
+
+
+</script>
+   
+<script src="~/Content/js/plugins/morris/morris.js"></script>
+<script src="~/Content/js/plugins/morris/raphael-2.1.0.min.js"></script>
+
+<script>
+    var _equipmentId;
+    var _equipmentName;
+    var _dataMark;
+    var _dataName;
+    var _dataUnit;
+    var _timeSpan;
+    var _beginTime;
+    var _endTime;
+    var _currentOption;
+
+    $('#equipments').change(function () {
+        _equipmentId = $(this).children('option:selected').val();
+        _equipmentName = $(this).children('option:selected').html();
+        if (_equipmentId > 0) {
+            $.ajax({
+                url: "/usercenter/GetDataListByEquipmentId",
+                data: { euipmentId: _equipmentId },
+                dataType: "json",
+                type: "post",
+                success: function (d) {
+                    if (d.Error == 0) {
+                        var _data = d.Data;
+                        var _html = '<option value="0">--请选择数据--</option>';
+                        for (var i = 0; i < _data.length; i++) {
+                            _html += '<option unit="' + _data[i].Unit + '" value="' + _data[i].Mark + '">' + _data[i].Mark + '--' + _data[i].Name + '</option>';
+                        }
+                        $("#datas").html(_html);
+                    }
+                    else {
+                        alert("该设备暂无数据");
+                    }
+                }
+            });
+        }
+    });
+
+    $("#datas").change(function () {
+        _dataMark = $(this).children('option:selected').val();
+        _dataName = $(this).children('option:selected').html().replace("--", " ");
+        _dataUnit = $(this).children('option:selected').attr("unit");
+    });
+
+    function chooseTimeSpan(a) {
+        _timeSpan = $(a).attr("span");
+        _currentOption = 1;
+    }
+
+    function Search() {
+        $("#chart").children().remove();
+        if (_dataMark == "" || _equipmentId == "") {
+            return;
+        }
+
+        $.ajax({
+            url: "/usercenter/GetAllDataChart",
+            data: { equipmentId: _equipmentId, mark: _dataMark, timeSpan: _timeSpan, beginTime: _beginTime, endTime: _endTime, currentOption: _currentOption },
+            type: "post",
+            success: function (data) {
+                var _data = [];
+                for (var i = 0; i < data.length; i++) {
+                    _data.push({
+                        time: data[i].time,
+                        value: data[i].value
+                    });
+                }
+                Morris.Line({
+                    element: "chart",
+                    data: _data,
+                    xkey: "time",
+                    ykeys: ["value"],
+                    resize: !0,
+                    lineWidth: 2,
+                    labels: ["Value"],
+                    lineColors: ["#1ab394"],
+                    pointSize: 0,
+                    //hoverCallback: function (index, options, default_content, row) {
+                    //    $("div[class='morris-hover morris-default-style']").html(default_content);
+                    //    return default_content;
+                    //}
+                });
+
+                $("#contentName").html(_equipmentName + " " + _dataName);
+                $("#dataUnit").html("单位：" + _dataUnit);
+                hidWindow();
+            }
+        });
+    }
+
+    
+
+
+</script>
+
+}
+

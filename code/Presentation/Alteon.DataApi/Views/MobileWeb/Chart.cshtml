@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "图表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h5>@Request.QueryString["name"] @Request.QueryString["mark"] @Request.QueryString["markName"] 今日走势</h5>
+<h6>单位：@Request.QueryString["unit"]</h6>
+
+<div id="chart"></div>
+
+
+@section iScript{
+    <script src="~/Content/js/plugins/morris/morris.js"></script>
+    <script src="~/Content/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script>
+        $(function () {
+            getData();
+        });
+
+
+        function getData() {
+            $("#chart").children().remove();
+            $.ajax({
+                url: '/usercenter/GetDataChart',
+                type: 'post',
+                data: { equipmentId: '@Request.QueryString["equipmentId"]', mark: '@Request.QueryString["mark"]' },
+                success: function (data) {
+                    var _data = [];
+                    for (var i = 0; i < data.length; i++) {
+                        _data.push({
+                            time: data[i].time,
+                            value: data[i].value
+                        });
+                    }
+
+                    Morris.Line({
+                        element: "chart",
+                        data: _data,
+                        xkey: "time",
+                        ykeys: ["value"],
+                        resize: !0,
+                        lineWidth: 2,
+                        labels: ["Value"],
+                        lineColors: ["#1ab394"],
+                        pointSize: 0,
+
+                    });
+                }
+            });
+        }
+
+        function ElectricChart() {
+
+        }
+    </script>
+}
+
+
+

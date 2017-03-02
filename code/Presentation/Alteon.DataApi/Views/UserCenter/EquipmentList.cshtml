@@ -1,0 +1,316 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ALTEON 耀腾智能机电监控云平台 - 设备</title>
+    <meta name="keywords" content="智能,监控,云平台,机电,耀腾,太阳能发电,BAS,BA,气体监控">
+    <meta name="description" content="
+          耀腾智能机电监控云平台是一个完全响应式，基于云端最新版本开发的工业机电监控系统，采用了modbus、tcp等传输协议方式与现场PLC系统对接，同时运行在pc和移动终端">
+    <link href="/Content/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="/Content/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="/Content/css/animate.min.css" rel="stylesheet">
+    <link href="/Content/css/style.min.css?v=3.0.0" rel="stylesheet">
+    <link href="~/Content/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+</head>
+<body class="gray-bg">
+    <div class="ibox-content" style="margin-left:0.5%;">
+        <div class="">
+            <a id="showWindow" data-toggle="modal" class="btn btn-primary" href="#modal-form">添加设备</a>
+        </div>
+        <table id="equipmentList" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+                <tr>
+                    <th>排序</th>
+                    <th>网关标识</th>
+                    <th>名称</th>
+                    <th>地理位置</th>
+                    <th>描述</th>
+                    <th>是否公开</th>
+                    <th>是否可控</th>
+                    <th>当前状态</th>
+                    <th>最后连接时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="ajaxData">
+                @*异步加载数据*@
+            </tbody>
+        </table>
+    </div>
+
+    <!--添加设备窗口-->
+    <div id="modal-form" class="modal fade" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        
+                            <h3 id="title" class="m-t-none m-b">添加设备</h3>
+                            <form role="form">
+                                <div class="form-group">
+                                    <label>序号：</label>
+                                    <input id="sorting" type="number" placeholder="请输入设备序号" class="form-control" onblur="Check(this)">
+                                </div>
+                                <div class="form-group">
+                                    <label>网关标识：</label>
+                                    <input id="gateNo" type="number" placeholder="请输入网关标识" class="form-control" onblur="Check(this)">
+                                </div>
+                                <div class="form-group">
+                                    <label>名称：</label>
+                                    <input id="name" type="text" placeholder="请输入设备名称" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>描述：</label>
+                                    <input id="intro" type="text" placeholder="请输入描述" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>地址：</label>
+                                    <input id="address" type="text" placeholder="请输入地理位置" class="form-control">
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="button" onclick="AddEquipment()">
+                                        <strong id="fontBtn">添加</strong>
+                                    </button>
+                                </div>
+                            </form>
+                        
+                        @*<div class="col-sm-6">
+                            <h4 style="visibility:hidden">sfdsd</h4>
+                            <label>
+                                <input id="isPublic" type="checkbox" class="i-checks">是否公开
+                            </label>
+                            <label>
+                                <input id="isControll" type="checkbox" class="i-checks">是否可控
+                            </label>
+                            <label>
+                                <input id="status" type="checkbox" class="i-checks">当前状态是否可用
+                            </label>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="~/Content/js/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+
+    <script src="/Content/js/plugins/jeditable/jquery.jeditable.js"></script>
+    <!-- Data Tables -->
+    <script src="/Content/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="/Content/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <!-- 自定义js -->
+    <script src="/Content/js/content.min.js?v=1.0.0"></script>
+    <!-- Page-Level Scripts -->
+    <script>
+        var page = { pageIndex: 1, pageSize: 10, totalCount: 0, startNum: 0, endNum: 0, totalPage: 0 };
+        $(document).ready(function () {
+            $("#equipmentList").dataTable({
+                "bLengthChange": false,//每页显示多少数据
+                "bFilter": false, //过滤功能（查询）
+                "ordering": false//禁用排序
+            });
+            AjaxLoadList();
+            $("#equipmentList_next").unbind();
+            $("#equipmentList_previous").unbind();
+            $("#equipmentList_next").click(function () {
+                page.pageIndex++;
+                AjaxLoadList();
+            });
+            $("#equipmentList_previous").click(function () {
+                page.pageIndex--;
+                AjaxLoadList();
+            });
+
+        });
+
+        function AjaxLoadList() {
+            $.ajax({
+                url: "AjaxGetEquipmentList",
+                data: { userKey: '@ViewBag.userKey', pageIndex: page.pageIndex, pageSize: page.pageSize },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        var obj = data.Data;
+                        var html = "";
+                        for (var i = 0; i < obj.length; i++) {
+                            html += "<tr class='gradeA'><td>" + obj[i].Sorting + "</td><td>" + obj[i].GateNo + "</td><td><a href='#' class='btn btn-white btn-sm' onclick='EditEquipment(" + obj[i].Id + ")'>" + obj[i].Name + "</a></td><td>" + obj[i].Address + "</td><td>" + obj[i].Intro + "</td><td>" + obj[i].IsPublic + "</td><td>" + obj[i].IsControl + "</td><td>" + obj[i].Status + "</td><td>" + obj[i].ConectTime + "</td><td><a href='#' onclick='DeleteEquipment(" + obj[i].Id + ")'>删除</a></td></tr>";
+                        }
+                        $("#ajaxData").html(html);
+                        page.totalCount = parseInt(data.Msg);
+                        page.startNum = (page.pageIndex - 1) * page.pageSize + 1;
+                        page.endNum = page.pageIndex * page.pageSize;
+                        if (page.endNum > page.totalCount)
+                            page.endNum = page.totalCount;
+                        page.totalPage = Math.ceil(page.totalCount / page.pageSize);
+                        $("#equipmentList_info").text("显示 " + page.startNum + " 到 " + page.endNum + " 项，共 " + page.totalCount + " 项");
+                        if (page.pageIndex == 1) {
+                            $("#equipmentList_previous").addClass("disabled");
+                        }
+                        else {
+                            $("#equipmentList_previous").removeClass("disabled");
+                        }
+                        if (page.pageIndex == page.totalPage) {
+                            $("#equipmentList_next").addClass("disabled");
+                        }
+                        else {
+                            $("#equipmentList_next").removeClass("disabled");
+                        }
+
+                    }
+                    else {
+                        $("#ajaxData").html('');
+                        $("#equipmentList_info").text("共 0 项");
+                        $("#equipmentList_previous").addClass("disabled");
+                        $("#equipmentList_next").addClass("disabled");
+                    }
+                },
+                error: function (e) {
+                    alert(e.error);
+                }
+            });
+        }
+
+
+    </script>
+
+    <script>
+        var isValid = true;
+
+        function Check(a) {
+            if (isNaN($(a).val())) {
+                isValid = false;
+            }
+        }
+
+        function AddEquipment() {
+            if (isValid) {
+                var flag = 0;
+                if ($("#fontBtn").text() == "修改") {
+                    flag = 1;
+                }
+                var _gateNo = $("#gateNo").val();
+                var _sorting = $("#sorting").val();
+                var _name = $("#name").val();
+                var _intro = $("#intro").val();
+                var _address = $("#address").val();
+                var _isPublic = $("#isPublic").prop("checked");
+                var _isControll = $("#isControll").prop("checked");
+                var _status = "";
+                if ($("#status").prop("checked")) {
+                    _status = 1;
+                }
+                else {
+                    _status = 0;
+                }
+                $.ajax({
+                    url: "AjaxAddEquipment",
+                    data: { Owner_Id: '@ViewBag.userKey', GateNo: _gateNo, Name: _name, Intro: _intro, Address: _address, Sorting: _sorting, IsControl: _isControll, IsPublic: _isPublic, Status: _status, flag: flag },
+                    dataType: "json",
+                    type: "post",
+                    success: function (data) {
+                        if (data.Error == 0) {
+                            $("#sorting").val("");
+                            $("#name").val("");
+                            $("#intro").val("");
+                            $("#address").val("");
+                            $("#isPublic").prop("checked", "");
+                            $("#isControll").prop("checked", "");
+                            $("#status").prop("checked", "");
+                            $("#name").removeAttr("disabled");
+                            $("#fontBtn").text("添加");
+                            $("#title").text("添加设备");
+                            AjaxLoadList();
+                            $("#modal-form").click();
+                        }
+                        else if (data.Error == 4) {
+                            location.href = "/usercenter/userinfo?flag=" + data.Msg;
+                        }
+                        else {
+                            alert(data.Msg);
+                        }
+                    },
+                    error: function (e) {
+                        alert(e.error);
+                    }
+                });
+            }
+        }
+
+        function EditEquipment(id) {
+            $.ajax({
+                url: "GetEquipmentById",
+                data: { id: id },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        $("#sorting").val(data.Data.Sorting);
+                        $("#name").val(data.Data.Name);
+                        $("#intro").val(data.Data.Intro);
+                        $("#address").val(data.Data.Address);
+                        $("#gateNo").val(data.Data.GateNo);
+                        if (data.Data.IsPublic == "是") {
+                            $("#isPublic").prop("checked", "checked");
+                        }
+                        else {
+                            $("#isPublic").prop("checked", "");
+                        }
+                        if (data.Data.IsControl == "是") {
+                            $("#isControll").prop("checked", "checked");
+                        }
+                        else {
+                            $("#isControll").prop("checked", "");
+                        }
+                        if (data.Data.Status == "使用") {
+                            $("#status").prop("checked", "checked");
+                        }
+                        else {
+                            $("#status").prop("checked", "");
+                        }
+                        $("#fontBtn").text("修改");
+                        $("#title").text("修改设备");
+                        $("#name").attr("disabled", "disabled");
+                        $("#showWindow").click();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function (e) {
+                    alert(e.error);
+                }
+            });
+        }
+
+
+        function DeleteEquipment(id) {
+            $.ajax({
+                url: "DeleteEquipmentById",
+                data: { id: id },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        AjaxLoadList();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function (e) {
+                    alert(e.error);
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

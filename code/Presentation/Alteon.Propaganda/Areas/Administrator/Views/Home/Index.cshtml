@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayoutPage.cshtml";
+}
+
+@section style{
+    <style>
+        body {
+            background-color: #f2f9fd;
+        }
+    </style>
+}
+<div class="header bg-main">
+    <div class="logo margin-big-left fadein-top">
+        <h1><img src="/Content/administrator/images/y.jpg" class="radius-circle rotate-hover" height="50" alt="" />后台管理中心</h1>
+    </div>
+    <div class="head-l"><a class="button button-little bg-green" href="" target="_blank"><span class="icon-home"></span> 前台首页</a> &nbsp;&nbsp;<a href="##" class="button button-little bg-blue"><span class="icon-wrench"></span> 清除缓存</a> &nbsp;&nbsp;<a class="button button-little bg-red" href="login.html"><span class="icon-power-off"></span> 退出登录</a> </div>
+</div>
+<div class="leftnav">
+    <div class="leftnav-title"><strong><span class="icon-list"></span>菜单列表</strong></div>
+    <h2><span class="icon-pencil-square-o"></span>商户管理</h2>
+    <ul>
+        <li><a href="PropagandaUser" target="right"><span class="icon-caret-right"></span>商户列表</a></li>
+    </ul>
+    <h2><span class="icon-pencil-square-o"></span>Banner管理</h2>
+    <ul>
+        <li><a href="PropagandaBanner" target="right"><span class="icon-caret-right"></span>Banner列表</a></li>
+    </ul>
+    <h2><span class="icon-pencil-square-o"></span>区域管理</h2>
+    <ul>
+        <li><a href="PropagandaArea" target="right"><span class="icon-caret-right"></span>区域列表</a></li>
+    </ul>
+</div>
+
+<ul class="bread">
+    <li><a href="{:U('Index/info')}" target="right" class="icon-home"> 首页</a></li>
+    <li><a href="PropagandaUser" id="a_leader_txt">商户列表</a></li>
+</ul>
+<div class="admin">
+    <iframe scrolling="auto" rameborder="0" src="PropagandaUser" name="right" width="100%" height="100%"></iframe>
+</div>
+<div style="text-align:center;"></div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $(".leftnav h2").click(function () {
+                $(this).next().slideToggle(200);
+                $(this).toggleClass("on");
+            })
+            $(".leftnav ul li a").click(function () {
+                $("#a_leader_txt").text($(this).text());
+                $(".leftnav ul li a").removeClass("on");
+                $(this).addClass("on");
+            })
+        });
+    </script>
+}

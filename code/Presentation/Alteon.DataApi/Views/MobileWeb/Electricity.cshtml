@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Electricity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="ajaxData">
+    <div class="container no-bottom">
+        <input type="hidden" value="" />
+        <div class="heading half-bottom">
+            <div class="heading-left">
+                <em>2016-5-30 22:30:52</em>
+                <h3>测试数据001</h3>
+            </div>
+            <div class="heading-right">
+                <img src="/content/images/greenLight.png" style="width:32px;height:32px" />
+            </div>
+        </div>
+        <p class="paragraph">
+            测试数据001的描述，测试数据001的描述，测试数据001的描述，测试数据001的描述，测试数据001的描述，测试数据001的描述
+        </p><input style="display:inline-block" onblur=""/>
+    </div>
+    <div class="decoration"></div>
+
+
+</div>
+
+@section iScript{
+    <script>
+        $(function () {
+            loadData();
+        });
+
+        function OnInput(event) {
+            var _money = $("#elecMoney").val().trim();
+            if (_money <= 0)
+                return;
+            $.ajax({
+                url: "/usercenter/EditDataById",
+                data: { EquipmentId: 5, Mark:'T1', MoneyMethod:_money  },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        var _totalElec = $("#totalElect").val();
+                        var _totalMoney = _totalElec * _money;
+                        $("#income").html("总收入： ￥ " + _totalMoney + " 元");
+                        
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function (e) {
+                    alert(e.error);
+                }
+            });
+        }
+
+        function loadData() {
+            $.ajax({
+                url: "/mobileweb/GetDataListByEquipmentIdAndMark",
+                data: { euipmentId: 5, mark: 'T1' },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        var obj = data.Data;
+                        var html = "";
+                        html += '<div class="container no-bottom"><input id="totalElect" type="hidden" value="' + obj.Value + '"/><input type="hidden" value="' + obj.Id + '"/><div class="heading half-bottom"><div class="heading-left"><em>' + obj.CreateTime + '</em><h3><a href="ElectricityChart?equipmentId=' + obj.EquipmentId + '&Mark=' + obj.Mark + '&MarkName=' + obj.Name + '&Name=' + obj.EquipmentName + '&Unit=' + obj.Unit + '">' + obj.Name + '</a></h3></div><div class="heading-right"><img src="/content/images/' + (obj.State == "0" ? 'grayLight.png' : 'greenLight.png') + '" style="width:32px;height:32px"/></div></div></div><div class="decoration"></div><div><h4>当日发电量：' + obj.TodayElectricity + obj.Unit + '</h4></div><div><h4>总发电量：' + obj.Value + obj.Unit + '</h4></div><div><h4>总二氧化碳减排量：' + obj.CarbonDioxideReduce + '吨</h4></div><div><h4>收入计算公式 = 总发电量 * <input id="elecMoney" type="number" value="' + obj.MoneyMethod + '" placeholder="每度电金额" style="width:30%;display:inline-block" oninput="OnInput(event)"/></h4></div><div><h4 id="income">总收入： ￥ ' + obj.InComeMoney + ' 元</h4></div>';
+                        $("#ajaxData").html(html);
+                    }
+                    if (data.Error == 1) {
+                        alert(data.Msg);
+                        location.href = "/MobileWeb/Index";
+                    }
+                    else {
+                        //alert(data.Msg);
+                    }
+                },
+                error: function (e) {
+                    //alert(e.error);
+                }
+            });
+        };
+    </script>
+}
+

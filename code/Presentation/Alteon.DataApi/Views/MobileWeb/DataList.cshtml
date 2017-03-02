@@ -1,0 +1,178 @@
+﻿@{
+    ViewBag.Title = "实时数据";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--编辑窗口-->
+<div id="update" style="display:none">
+    <input type="hidden" value="" id="equipmentId" />
+    <div style="text-align:center;margin-top:3%"><h3 id="title">修改数据信息</h3></div>
+    <div class="form-group">
+        <label>排序：</label>
+        <input id="sorting" type="number" placeholder="请输入序号" class="form-control">
+    </div>
+    <div class="form-group">
+        <label>名称：</label>
+        <input id="name" type="text" placeholder="请输入数据名称" class="form-control">
+    </div>
+    <div class="form-group">
+        <label>标识：</label>
+        <input id="mark" disabled="disabled" type="text" class="form-control">
+    </div>
+    @*<div class="form-group">
+        <label>数值：</label>
+        <input id="number" type="text" disabled="disabled" class="form-control">
+    </div>*@
+    <div class="form-group">
+        <label>单位：</label>
+        <input id="unit" type="text" class="form-control">
+    </div>
+    <div class="form-group">
+        <label>公式：显示值=原数据*A+B</label>
+        <div>
+            <label style="float:left">A=</label><input id="a" type="text" value="1" class="form-control" style="float:left;width:30%" />
+        </div>
+        <div>
+            <label style="float:left">B=</label><input id="b" type="text" value="0" class="form-control" style="float: left; width: 30%" />
+        </div>
+    </div>
+    <div style="text-align: right; margin-top: 13%">
+        <strong onclick="SaveData()" style=" margin-right: 6%; color: #5d8af6; font-size: 18px;">保存</strong>
+    </div>
+</div>
+
+<div id="ajaxData">
+    @*<div class="container no-bottom">
+        <input type="hidden" value="" />
+        <div class="heading half-bottom">
+            <div class="heading-left">
+                <em>2016-5-30 22:30:52</em>
+                <h3><a>某某某</a></h3>
+            </div>
+            <div class="heading-right">
+                <img src="/content/images/greenLight.png" style="width:32px;height:32px" />
+            </div>
+        </div>
+        <div class="heading-left">T1:33.3 Hz</div>
+        <div class="heading-right">编辑</div>
+    </div>
+    <div class="decoration"></div>*@
+
+</div>
+<div id="more" style="text-align:center" >没有更多了</div>
+@section iScript{
+    <script>
+    var page = { pageIndex: 1, pageSize: 9999, totalCount: 0, startNum: 0, endNum: 0, totalPage: 0 };
+
+    $(function () {
+        loadData();
+        setInterval(function () {
+            loadData();
+        }, 1000 * 10)
+    });
+
+    function nextPage() {
+        page.pageIndex++;
+        loadData();
+    }
+
+    function loadData() {
+        $.ajax({
+            url: "/usercenter/GetDataList",
+            data: { ownerId: '@ViewBag.ownerId' },
+            dataType: "json",
+            type: "post",
+            success: function (data) {
+                if (data.Error == 0) {
+                    var obj = data.Data;
+                    var html = "";
+                    for (var i = 0; i < obj.length; i++) {
+                        //alert(obj[i].State);
+                        html += '<div class="container no-bottom"><input type="hidden" value="' + obj[i].Id + '"/><div class="heading half-bottom"><div class="heading-left"><em>' + obj[i].CreateTime + '</em><h3><a href="Chart?equipmentId=' + obj[i].EquipmentId + '&Mark=' + obj[i].Mark + '&MarkName=' + obj[i].Name + '&Name=' + obj[i].EquipmentName + '&Unit=' + obj[i].Unit + '">' + obj[i].Name + '</a></h3></div><div class="heading-right"><img src="/content/images/' + (obj[i].State == "0" ? 'grayLight.png' : 'greenLight.png') + '" style="width:32px;height:32px"/></div></div><div class="heading-left" style="font-size:16px">' + obj[i].Mark + ':   ' + obj[i].Value + '   ' + obj[i].Unit + '</div><div class="heading-right" onclick="GetDetail(' + obj[i].Id + ')">编辑</div></div><div class="decoration"></div>';
+
+                        
+                    }
+                    $("#ajaxData").html(html);
+                }
+                //if (data.Error == 1) {
+                //    $("#more").html("没有更多了");
+                //}
+            },
+            error: function (e) {
+                //alert(e.error);
+            }
+        });
+    };
+
+        function GetDetail(id) {
+            $.ajax({
+                url: "/usercenter/GetDataById",
+                data: { id: id },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        $("#equipmentId").val(data.Data.EquipmentId);
+                        $("#sorting").val(data.Data.SortingIndex);
+                        $("#name").val(data.Data.Name);
+                        $("#unit").val(data.Data.Unit);
+                        $("#mark").val(data.Data.Mark);
+                        //$("#number").val(data.Data.Value);
+                        if (data.Data.Method != "" && data.Data.Method!=undefined)
+                        {
+                            //alert(data.Data.Method);
+                            var methodNum = data.Data.Method.split('+');
+                            $("#a").val(methodNum[0]);
+                            $("#b").val(methodNum[1]);
+                        }
+                        
+                        showWindow();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function (e) {
+                    alert(e.error);
+                }
+            });
+        }
+
+        function SaveData() {
+            var _equipmentId = $("#equipmentId").val();
+            var _mark = $("#mark").val();
+            var _name = $("#name").val();
+            var _unit = $("#unit").val();
+            var _sortingIndex = $("#sorting").val();
+            var _method = $("#a").val() + "+" + $("#b").val();
+            $.ajax({
+                url: "/usercenter/EditDataById",
+                data: { EquipmentId: _equipmentId, Name: _name, Mark: _mark, Method: _method, Unit: _unit, SortingIndex: _sortingIndex },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        $("#equipmentId").val();
+                        $("#sorting").val();
+                        $("#name").val();
+                        $("#mark").val();
+                        //$("#number").val();
+                        loadData();
+                        hidWindow();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function (e) {
+                    alert(e.error);
+                }
+            });
+
+        }
+
+
+
+       
+    </script>
+}

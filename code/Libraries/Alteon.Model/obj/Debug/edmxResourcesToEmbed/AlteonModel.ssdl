@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AlteonModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Api_ClientEquipment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GateNo" Type="int" />
+    <Property Name="Owner_Id" Type="nvarchar" MaxLength="32" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Intro" Type="nvarchar" MaxLength="500" />
+    <Property Name="Address" Type="nvarchar" MaxLength="500" />
+    <Property Name="Sorting" Type="int" />
+    <Property Name="IsControl" Type="bit" />
+    <Property Name="IsPublic" Type="bit" />
+    <Property Name="Status" Type="int" />
+    <Property Name="ConectTime" Type="datetime" />
+    <Property Name="IsDelete" Type="bit" />
+  </EntityType>
+  <EntityType Name="Api_ClientOwner">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="32" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="10" />
+    <Property Name="Mobile" Type="nvarchar" MaxLength="11" />
+    <Property Name="Password" Type="nvarchar" MaxLength="40" />
+    <Property Name="Intro" Type="nvarchar" MaxLength="500" />
+    <Property Name="UserIdentity" Type="int" />
+    <Property Name="Head" Type="nvarchar" MaxLength="100" />
+    <Property Name="Status" Type="int" />
+    <Property Name="RegisterTime" Type="datetime" />
+    <Property Name="Remark" Type="nvarchar" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="Api_DataValue">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EquipmentData_Id" Type="int" />
+    <Property Name="Value" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="CreateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Api_EquipmentData">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EquipmentId" Type="int" Nullable="false" />
+    <Property Name="Mark" Type="nvarchar" MaxLength="5" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="State" Type="int" />
+    <Property Name="NormalValue" Type="nvarchar" MaxLength="50" />
+    <Property Name="Type" Type="nvarchar" MaxLength="10" />
+    <Property Name="SortingIndex" Type="int" />
+    <Property Name="IsDelete" Type="bit" />
+    <Property Name="Method" Type="varchar" MaxLength="50" />
+    <Property Name="Unit" Type="varchar" MaxLength="10" />
+    <Property Name="MoneyMethod" Type="decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="Hqlk_Article">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="50" />
+    <Property Name="ImageUrl" Type="nvarchar" MaxLength="200" />
+    <Property Name="Type" Type="int" />
+    <Property Name="Description" Type="nvarchar" MaxLength="500" />
+    <Property Name="Content" Type="nvarchar(max)" />
+    <Property Name="SortingIndex" Type="int" />
+    <Property Name="IsIndexPageShow" Type="int" />
+    <Property Name="IsUse" Type="int" />
+  </EntityType>
+  <EntityType Name="Hqlk_Banner">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="url" Type="nvarchar" MaxLength="500" />
+    <Property Name="SortingIndex" Type="int" />
+    <Property Name="IsUse" Type="int" />
+  </EntityType>
+  <EntityType Name="Propaganda_AdverContent">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Advertising_Id" Type="int" />
+    <Property Name="Content" Type="nvarchar" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="Propaganda_Advertising">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BusinessUser_Id" Type="int" />
+    <Property Name="Intro" Type="nvarchar" MaxLength="200" />
+    <Property Name="Type" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Propaganda_Article">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Category_Id" Type="int" />
+    <Property Name="Title" Type="nvarchar" MaxLength="20" />
+    <Property Name="SubTitle" Type="nvarchar" MaxLength="30" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="Photo" Type="nvarchar" MaxLength="200" />
+    <Property Name="Author" Type="nvarchar" MaxLength="50" />
+    <Property Name="Content" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Propaganda_ArticleCategory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="10" />
+    <Property Name="Sort" Type="int" />
+  </EntityType>
+  <EntityType Name="Propaganda_User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Account" Type="nvarchar" MaxLength="11" />
+    <Property Name="Code" Type="nvarchar" MaxLength="10" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="QQ" Type="nvarchar" MaxLength="20" />
+    <Property Name="WeiXin" Type="nvarchar" MaxLength="20" />
+    <Property Name="Address" Type="nvarchar" MaxLength="200" />
+    <Property Name="Telephone" Type="nchar" MaxLength="10" />
+    <Property Name="Email" Type="nvarchar" MaxLength="20" />
+    <Property Name="Style" Type="int" />
+    <Property Name="RegisterTime" Type="datetime" />
+    <Property Name="State" Type="int" />
+    <Property Name="BusinessCard" Type="nvarchar" MaxLength="500" />
+    <Property Name="HeadPortrait" Type="nvarchar" MaxLength="500" />
+    <Property Name="Comany" Type="nvarchar" MaxLength="50" />
+    <Property Name="Logo" Type="nvarchar" MaxLength="200" />
+    <Property Name="Level" Type="int" />
+  </EntityType>
+  <EntityContainer Name="AlteonModelStoreContainer">
+    <EntitySet Name="Api_ClientEquipment" EntityType="Self.Api_ClientEquipment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Api_ClientOwner" EntityType="Self.Api_ClientOwner" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Api_DataValue" EntityType="Self.Api_DataValue" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Api_EquipmentData" EntityType="Self.Api_EquipmentData" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Hqlk_Article" EntityType="Self.Hqlk_Article" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Hqlk_Banner" EntityType="Self.Hqlk_Banner" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Propaganda_AdverContent" EntityType="Self.Propaganda_AdverContent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Propaganda_Advertising" EntityType="Self.Propaganda_Advertising" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Propaganda_Article" EntityType="Self.Propaganda_Article" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Propaganda_ArticleCategory" EntityType="Self.Propaganda_ArticleCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Propaganda_User" EntityType="Self.Propaganda_User" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

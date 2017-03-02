@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
+  <Alias Key="Model" Value="AlteonModel" />
+  <Alias Key="Target" Value="AlteonModel.Store" />
+  <EntityContainerMapping CdmEntityContainer="AlteonModelContainer" StorageEntityContainer="AlteonModelStoreContainer">
+    <EntitySetMapping Name="Hqlk_Article">
+      <EntityTypeMapping TypeName="AlteonModel.Hqlk_Article">
+        <MappingFragment StoreEntitySet="Hqlk_Article">
+          <ScalarProperty Name="IsUse" ColumnName="IsUse" />
+          <ScalarProperty Name="IsIndexPageShow" ColumnName="IsIndexPageShow" />
+          <ScalarProperty Name="SortingIndex" ColumnName="SortingIndex" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Hqlk_Banner">
+      <EntityTypeMapping TypeName="AlteonModel.Hqlk_Banner">
+        <MappingFragment StoreEntitySet="Hqlk_Banner">
+          <ScalarProperty Name="IsUse" ColumnName="IsUse" />
+          <ScalarProperty Name="SortingIndex" ColumnName="SortingIndex" />
+          <ScalarProperty Name="url" ColumnName="url" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Api_ClientOwner">
+      <EntityTypeMapping TypeName="AlteonModel.Api_ClientOwner">
+        <MappingFragment StoreEntitySet="Api_ClientOwner">
+          <ScalarProperty Name="Head" ColumnName="Head" />
+          <ScalarProperty Name="UserIdentity" ColumnName="UserIdentity" />
+          <ScalarProperty Name="RegisterTime" ColumnName="RegisterTime" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Intro" ColumnName="Intro" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Api_ClientEquipment">
+      <EntityTypeMapping TypeName="AlteonModel.Api_ClientEquipment">
+        <MappingFragment StoreEntitySet="Api_ClientEquipment">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="ConectTime" ColumnName="ConectTime" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
+          <ScalarProperty Name="IsControl" ColumnName="IsControl" />
+          <ScalarProperty Name="Sorting" ColumnName="Sorting" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Intro" ColumnName="Intro" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Owner_Id" ColumnName="Owner_Id" />
+          <ScalarProperty Name="GateNo" ColumnName="GateNo" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Api_DataValue">
+      <EntityTypeMapping TypeName="AlteonModel.Api_DataValue">
+        <MappingFragment StoreEntitySet="Api_DataValue">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="EquipmentData_Id" ColumnName="EquipmentData_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Api_EquipmentData">
+      <EntityTypeMapping TypeName="AlteonModel.Api_EquipmentData">
+        <MappingFragment StoreEntitySet="Api_EquipmentData">
+          <ScalarProperty Name="MoneyMethod" ColumnName="MoneyMethod" />
+          <ScalarProperty Name="Unit" ColumnName="Unit" />
+          <ScalarProperty Name="Method" ColumnName="Method" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="SortingIndex" ColumnName="SortingIndex" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="NormalValue" ColumnName="NormalValue" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Mark" ColumnName="Mark" />
+          <ScalarProperty Name="EquipmentId" ColumnName="EquipmentId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Propaganda_AdverContent">
+      <EntityTypeMapping TypeName="AlteonModel.Propaganda_AdverContent">
+        <MappingFragment StoreEntitySet="Propaganda_AdverContent">
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="Advertising_Id" ColumnName="Advertising_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Propaganda_Advertising">
+      <EntityTypeMapping TypeName="AlteonModel.Propaganda_Advertising">
+        <MappingFragment StoreEntitySet="Propaganda_Advertising">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Intro" ColumnName="Intro" />
+          <ScalarProperty Name="BusinessUser_Id" ColumnName="BusinessUser_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Propaganda_User">
+      <EntityTypeMapping TypeName="AlteonModel.Propaganda_User">
+        <MappingFragment StoreEntitySet="Propaganda_User">
+          <ScalarProperty Name="Level" ColumnName="Level" />
+          <ScalarProperty Name="Logo" ColumnName="Logo" />
+          <ScalarProperty Name="Comany" ColumnName="Comany" />
+          <ScalarProperty Name="HeadPortrait" ColumnName="HeadPortrait" />
+          <ScalarProperty Name="BusinessCard" ColumnName="BusinessCard" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="RegisterTime" ColumnName="RegisterTime" />
+          <ScalarProperty Name="Style" ColumnName="Style" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="WeiXin" ColumnName="WeiXin" />
+          <ScalarProperty Name="QQ" ColumnName="QQ" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="Account" ColumnName="Account" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Propaganda_Article">
+      <EntityTypeMapping TypeName="AlteonModel.Propaganda_Article">
+        <MappingFragment StoreEntitySet="Propaganda_Article">
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="Author" ColumnName="Author" />
+          <ScalarProperty Name="Photo" ColumnName="Photo" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="SubTitle" ColumnName="SubTitle" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Category_Id" ColumnName="Category_Id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Propaganda_ArticleCategory">
+      <EntityTypeMapping TypeName="AlteonModel.Propaganda_ArticleCategory">
+        <MappingFragment StoreEntitySet="Propaganda_ArticleCategory">
+          <ScalarProperty Name="Sort" ColumnName="Sort" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

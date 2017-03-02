@@ -1,0 +1,97 @@
+﻿@model string
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ALTEON 耀腾智能机电监控云平台 - 图表</title>
+    <meta name="keywords" content="智能,监控,云平台,机电,耀腾,太阳能发电,BAS,BA,气体监控">
+    <meta name="description" content="
+          耀腾智能机电监控云平台是一个完全响应式，基于云端最新版本开发的工业机电监控系统，采用了modbus、tcp等传输协议方式与现场PLC系统对接，同时运行在pc和移动终端">
+    <link href="/Content/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="/Content/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+
+    <!-- orris -->
+    <link href="/Content/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+
+    <link href="/Content/css/animate.min.css" rel="stylesheet">
+    <link href="/Content/css/style.min.css?v=3.0.0" rel="stylesheet">
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>@Request.QueryString["name"] @Request.QueryString["mark"] 数据线性图</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="">
+                            <a data-toggle="modal" class="btn btn-primary" href="javascript:history.go(-1);">返回</a>
+                            <label>单位：@Request.QueryString["unit"]</label>
+                        </div>
+                      <div id="chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="~/Content/js/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js?v=3.4.0"></script>
+    <!-- Morris -->
+    <script src="~/Content/js/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/js/plugins/morris/morris.js"></script>
+    <!-- 自定义js -->
+    @*<script src="~/Content/js/content.min.js?v=1.0.0"></script>*@
+    <!-- Morris-->
+    <script src="~/Content/js/plugins/morris/morris.js"></script>
+    <script src="~/Content/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script>
+        $(function () {
+            getData();
+            //setInterval(function () {
+            //    getData();
+            //}, 1000 * 15)
+        });
+        function getData() {
+            $("#chart").children().remove();
+            $.ajax({
+                url: 'GetDataChart',
+                type: 'post',
+                data: { equipmentId: '@Request.QueryString["equipmentId"]', mark: '@Request.QueryString["mark"]'},
+                success: function (data) {
+                    var _data = [];
+                    for (var i = 0; i < data.length; i++) {
+                        _data.push({
+                            time: data[i].time,
+                            value: data[i].value
+                        });
+                    }
+
+                    Morris.Line({
+                        element: "chart",
+                        data: _data,
+                        xkey: "time",
+                        ykeys: ["value"],
+                        resize: !0,
+                        lineWidth: 4,
+                        labels: ["Value"],
+                        lineColors: ["#1ab394"],
+                        pointSize: 0,
+                        hoverCallback: function (index, options, default_content, row) {
+                            $("div[class='morris-hover morris-default-style']").html(default_content);
+                            return default_content;
+                        }
+                    });
+                }
+            });
+        }
+</script>
+</body>
+</html>

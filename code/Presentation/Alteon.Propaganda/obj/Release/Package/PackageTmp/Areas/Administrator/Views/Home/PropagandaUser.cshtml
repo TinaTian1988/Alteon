@@ -1,0 +1,236 @@
+﻿
+@{
+    ViewBag.Title = "Propaganda_User";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayoutPage.cshtml";
+}
+<div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder"> 商户列表</strong></div>
+    <div class="padding border-bottom">
+        <ul class="search">
+            <li>
+                <button type="button" class="button border-green" id="checkall"><span class="icon-check"></span> 全选</button>
+                <button type="button" onclick="DelSelect();" class="button border-red"><span class="icon-trash-o"></span> 批量删除</button>
+            </li>
+            <li>
+                <select id="area" class="input" style="width:200px; line-height:17px;" onchange="changesearch()"></select>
+            </li>
+            <li>
+                <input type="text" placeholder="请输入搜索关键字" id="keyword" class="input" style="width:250px; line-height:17px;display:inline-block" />
+                <a href="javascript:void(0)" class="button border-main icon-search" onclick="changesearch()"> 搜索</a>
+            </li>
+        </ul>
+    </div>
+    <table id="target" class="table table-hover text-center"></table>
+</div>
+
+
+
+@section scripts{
+    <script type="text/javascript">
+        var _pageIndex = 1;
+        var _pageSize = 5;
+        var _aid = 0;
+        var _keyword = '';
+        BindArea();
+        GetPropagandaUser(_aid, _keyword, _pageIndex, _pageSize);
+
+
+        function BindArea() {
+            $.ajax({
+                url: 'AjaxGetPropagandaArea',
+                type: 'post',
+                dataType: 'json',
+                success: function (r) {
+                    if (r.status == 1) {
+                        var _html = '<option value="0">请选择区域</option>';
+                        for (var i = 0; i < r.data.length; i++) {
+                            _html += '<option value="' + r.data[i].Id + '">' + r.data[i].Name + '</option>';
+                        }
+                        $("#area").html(_html);
+                    }
+                    else {
+                        //alert('暂无数据');
+                    }
+                }
+            });
+        }
+
+        function GetPropagandaUser(_aid, _keyword, _pageIndex, _pageSize) {
+            $.ajax({
+                url: 'AjaxGetPropagandaUser',
+                type: 'post',
+                dataType: 'json',
+                data: { aid: _aid, keyword: _keyword, pageIndex: _pageIndex, pageSize: _pageSize },
+                success: function (r) {
+                    var _html = '<tr><th width="5%">ID</th><th width="10%">账号</th><th width="10%">姓名</th><th width="15%">Logo</th><th width="10%">公司</th><th width="10%">状态</th><th width="10%">注册时间</th><th width="20%">操作</th></tr>';
+                    if (r.status == 1) {
+                        for (var i = 0; i < r.data.length; i++) {
+                            _html += '<tr>';
+                            _html += '<td><input type="checkbox" name="id[]" value="' + r.data[i].Id + '" />' + r.data[i].Id + '</td>';
+                            _html += '<td>' + r.data[i].Account + '</td>';
+                            _html += '<td>' + r.data[i].Name + '</td>';
+                            _html += '<td width="10%"><img src="https://www.alteon.info' + r.data[i].Logo + '" alt="" width="70" height="50" /></td>';
+                            _html += '<td>' + r.data[i].Company + '</td>';
+                            var _style = '';
+                            var _state = '';
+                            switch (r.data[i].State) {
+                                case 0:
+                                    _state = '正常';
+                                    break;
+                                case 1:
+                                    _state = '待审核';
+                                    _style = 'color:red';
+                                    break;
+                                case 2:
+                                    _state = '禁用';
+                                    _style = 'color:#808080';
+                                    break;
+                            }
+                            _html += '<td style="' + _style + '">' + _state + '</td>';
+                            _html += '<td>' + r.data[i].RegisterTime + '</td>';
+                            _html += '<td>';
+                            _html += '<div class="button-group">';
+                            _html += '<a type="button" class="button border-main" href="EditePropagandaUser?id=' + r.data[i].Id + '"><span class="icon-edit"></span>修改</a>';
+                            if (r.data[i].State == 1) {
+                                _html += '<a type="button" class="button border-green" href="javascript:void(0)" onclick="valid('+r.data[i].Id+',0)"><span class="icon-edit"></span>通过</a>';
+                            }
+                            else if (r.data[i].State == 2) {
+                                _html += '<a type="button" class="button border-green" href="javascript:void(0)" onclick="valid(' + r.data[i].Id + ',0)"><span class="icon-edit"></span>启用</a>';
+                            }
+                            else if (r.data[i].State == 0) {
+                                _html += '<a type="button" class="button border-green" href="javascript:void(0)" onclick="valid(' + r.data[i].Id + ',2)"><span class="icon-edit"></span>禁用</a>';
+                            }
+                            _html += '<a class="button border-red" href="javascript:void(0)" onclick="return del(' + r.data[i].Id + ')"><span class="icon-trash-o"></span> 删除</a>';
+                            _html += '</div>';
+                            _html += '</td>';
+                            _html += '</tr>';
+                        }
+                        var _totalPage = Math.ceil(r.dataCount / _pageSize);
+                        _html += '<tr>';
+                        _html += '<td colspan="8">';
+                        _html += '<div class="pagelist">';
+                        if (_pageIndex > 1) {
+                            _html += '<a href="javascript:void(0)" onclick="changePage(' + _pageIndex + ',- 1 )">上一页</a>';
+                        }
+                        for (var i = 1; i <= _totalPage; i++) {
+                            if (_pageIndex == i) {
+                                _html += '<span class="current">' + i + '</span>';
+                            }
+                            else {
+                                _html += '<a href="javascript:void(0)" onclick="changePage(' + i + ',0)">' + i + '</a>';
+                            }
+                        }
+                        if (_pageIndex < _totalPage) {
+                            _html += '<a href="javascript:void(0)" onclick="changePage(' + _pageIndex + ',1)">下一页</a>';
+                        }
+                        if (_totalPage > 1) {
+                            _html += '<a href="javascript:void(0)" onclick="changePage(' + _totalPage + ',0)">尾页</a>';
+                        }
+
+                        _html += '</div>';
+                        _html += '</td>';
+                        _html += '</tr>';
+                    }
+                    $("#target").html(_html);
+                }
+            });
+        }
+
+
+
+        function changePage(_index,_count) {
+            if (_count != 0)
+                _pageIndex = _pageIndex + _count;
+            else
+                _pageIndex = _index;
+            GetPropagandaUser(_aid, _keyword, _pageIndex, _pageSize);
+        }
+
+        //搜索
+        function changesearch() {
+            _aid = $("#area").val();
+            _keyword = $("#keyword").val().trim();
+            GetPropagandaUser(_aid, _keyword, _pageIndex, _pageSize);
+        }
+
+        function del(id) {
+            if (confirm("您确定要删除吗?")) {
+                $.ajax({
+                    url: 'AjaxDeletePropogandaUser',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { ids: id },
+                    success: function (r) {
+                        if (r.status == 1) {
+                            GetPropagandaUser(_aid, _keyword, 1, _pageSize);
+                        }
+                    }
+                });
+            }
+        }
+
+        function valid(id, state) {
+            var _tip = '';
+            if (state == 0)
+                _tip = "是否要审核通过？";
+            if (state == 2)
+                _tip = "是否要禁用该商户？";
+            if (confirm(_tip)) {
+                $.ajax({
+                    url: 'AjaxValidPropagandaUser',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { userId: id, state: state },
+                    success: function (r) {
+                        if (r.status == 1) {
+                            GetPropagandaUser(_aid, _keyword, _pageIndex, _pageSize);
+                        }
+                    }
+                });
+            }
+        }
+
+        $("#checkall").click(function () {
+            $("input[name='id[]']").each(function () {
+                if (this.checked) {
+                    this.checked = false;
+                }
+                else {
+                    this.checked = true;
+                }
+            });
+        })
+
+        function DelSelect() {
+            var _ids = '';
+            var Checkbox = false;
+            $("input[name='id[]']").each(function () {
+                if (this.checked == true) {
+                    Checkbox = true;
+                    _ids += $(this).val() + ',';
+                }
+            });
+            if (Checkbox) {
+                var t = confirm("您确认要删除选中的内容吗？");
+                if (t == false) return false;
+            }
+            else {
+                alert("请选择您要删除的内容!");
+                return false;
+            }
+            $.ajax({
+                url: 'AjaxDeletePropogandaUser',
+                type: 'post',
+                dataType: 'json',
+                data: { ids: _ids },
+                success: function (r) {
+                    if (r.status == 1) {
+                        GetPropagandaUser(_aid, _keyword, 1, _pageSize);
+                    }
+                }
+            });
+        }
+
+    </script>
+}
+

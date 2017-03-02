@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "PropagandaBanner";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayoutPage.cshtml";
+}
+
+<div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder"> Banner列表</strong></div>
+    <div class="padding border-bottom" onclick="ShowEdit(1,'',0);">
+        <a class="button border-yellow" href="javascript:void(0)"><span class="icon-plus-square-o"></span> 添加新的Banner</a>
+    </div>
+    <table id="target" class="table table-hover text-center"></table>
+</div>
+
+<div id="addNew" class="panel admin-panel margin-top" style="display:none">
+    <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span> 增加Banner</strong></div>
+    <form id="form_upload" style="padding:20px;display:none" action="AddPic" method="post" enctype="multipart/form-data">
+        <div class="body-content">
+            <div class="form-x">
+                <div class="form-group">
+                    <div class="label">
+                        <label>图片：</label>
+                    </div>
+                    <div class="field">
+                        <input type="file" class="input w50" id="url" value="" data-validate="required:请选择图片" />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>排序：</label>
+                    </div>
+                    <div class="field">
+                        <input type="number" class="input w50" id="sortIndex" value="" data-validate="required:请输入序号" />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label></label>
+                    </div>
+                    <div class="field">
+                        <button onclick="Edit()" class="button bg-main icon-check-square-o" type="button"> 提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts{
+    <script>
+        var _Id = 0;
+        GetData();
+
+        function del(id) {
+            if (confirm("您确定要删除吗?")) {
+                $.ajax({
+                    url: 'DeletePropagandaAreaById',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { ids: id },
+                    success: function (r) {
+                        if (r.status == 1) {
+                            GetData();
+                            //alert('删除成功');
+                        }
+                    }
+                });
+            }
+        }
+
+        function GetData() {
+            $.ajax({
+                url: 'AjaxGetPropagandaBanner',
+                type: 'post',
+                dataType: 'json',
+                success: function (r) {
+                    if (r.status == 1) {
+                        var _html = '<tr><th width="5%">ID</th><th>图片</th><th>序号</th><th width="15%">操作</th></tr>';
+                        for (var i = 0; i < r.data.length; i++) {
+                            _html += '<tr>';
+                            _html += '<td>' + r.data[i].Id + '</td>';
+                            _html += '<td><img src="' + r.data[i].Url + '" style="width:120px;height:80px"/></td>';
+                            _html += '<td>' + r.data[i].SortIndex +'</td>';
+                            _html += '<td>';
+                            _html += '<div class="button-group">';
+                            _html += '<a class="button border-red" href="javascript:void(0)" onclick="return del(' + r.data[i].Id + ')"><span class="icon-trash-o"></span> 删除</a>';
+                            _html += '</div>';
+                            _html += '</td>';
+                            _html += '</tr>';
+                        }
+                        $("#target").html(_html);
+                    }
+                    else {
+                        //alert('暂无数据');
+                    }
+                }
+            });
+        }
+
+        function Edit() {
+            var _name = $("#name").val().trim();
+            var _latitudeStart = $("#latitudeStart").val();
+            var _latitudeEnd = $("#latitudeEnd").val();
+            var _longitudeStart = $("#longitudeStart").val();
+            var _longitudeEnd = $("#longitudeEnd").val();
+            if (_name != '') {
+                $.ajax({
+                    url: 'AjaxEditPropagandaArea',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { Name: _name, Id: _Id, LatitudeStart: _latitudeStart, LatitudeEnd: _latitudeEnd, LongitudeStart: _longitudeStart, LongitudeEnd: _longitudeEnd },
+                    success: function (r) {
+                        if (r.status == 1) {
+                            GetData();
+                            $("#addNew").hide();
+                        }
+                    }
+                });
+            }
+        }
+
+        function ShowEdit(_type, _name, _id, _latitudeStart, _latitudeEnd, _longitudeStart, _longitudeEnd) {
+            //alert(_id); return;
+            if (_type == 1) {//添加
+                $("#add").html('<strong><span class="icon-pencil-square-o"></span> 增加内容</strong>');
+            }
+            else {//编辑
+                $("#add").html('<strong><span class="icon-pencil-square-o"></span> 编辑内容</strong>');
+            }
+            _Id = _id;
+            $("#name").val(_name);
+            $("#latitudeStart").val(_latitudeStart);
+            $("#latitudeEnd").val(_latitudeEnd);
+            $("#longitudeStart").val(_longitudeStart);
+            $("#longitudeEnd").val(_longitudeEnd);
+            $("#addNew").show();
+        }
+
+
+    </script>
+}

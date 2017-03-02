@@ -1,0 +1,215 @@
+﻿@model Alteon.Model.Propaganda_User
+@{
+    ViewBag.Title = "EditePropagandaUser";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayoutPage.cshtml";
+    var _state="";
+}
+@section style{
+    <style>
+        .unchangeInfo{
+            margin-top:10px;
+            font-weight:800;
+        }
+    </style>
+}
+<div class="panel admin-panel">
+    <div class="panel-head" id="add">
+        <strong><span class="icon-pencil-square-o"></span> 编辑</strong>
+    </div>
+    <div class="body-content">
+        <form action="AjaxEditPropagandaUser" method="post" enctype="multipart/form-data" class="form-x">
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <input type="hidden" name="Code" value="@Model.Code" />
+            <input type="hidden" name="Password" value="@Model.Password" />
+            <input type="hidden" name="Style" value="@Model.Style" />
+            <input type="hidden" name="UpdateTime" value="@Model.UpdateTime" />
+            <input type="hidden" name="RegisterTime" value="@Model.RegisterTime" />
+            <input type="hidden" name="State" value="@Model.State" />
+            <input type="hidden" name="BusinessCard" value="@Model.BusinessCard" />
+            <input type="hidden" name="Account" value="@Model.Account"/>
+            <input type="hidden" name="WeiXinOpenId" value="@Model.WeiXinOpenId" />
+            <div class="form-group">
+                <div class="label">
+                    <label>当前状态：</label>
+                </div>
+                <div class="field">
+                    @switch (Model.State)
+                    {
+                        case 0:
+                            _state = "正常";
+                            break;
+                        case 1:
+                            _state = "待审核";
+                            break;
+                        case 2:
+                            _state = "禁用";
+                            break;
+                    }
+                    <label class="input w50">@_state</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>区域：</label>
+                </div>
+                <div class="field">
+                    <input id="_aid" type="hidden" name="Area_Id" value="@Model.Area_Id" />
+                    <select id="_area" class="input w50" onchange="SetAid()"></select>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>手机：</label>
+                </div>
+                <div class="field">
+                    <label class="input w50">@Model.Account</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>名称：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="@Model.Name" name="Name" id="name" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>头像：</label>
+                </div>
+                <div class="field">
+                    <img src="@Model.HeadPortrait" style="width:100px;height:100px" />
+                    <input type="hidden" name="HeadPortrait" value="@Model.HeadPortrait" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>Logo：</label>
+                </div>
+                <div class="field">
+                    <img src="https://www.alteon.info@Model.Logo" style="width:250px;height:150px" />
+                    <input type="hidden" name="Logo" value="@Model.Logo" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>公司：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="@Model.Company" name="Company" id="company" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>微信openId：</label>
+                </div>
+                <div class="field">
+                    <label class="input w50">@Model.WeiXinOpenId</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>微信账号：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="@Model.WeiXin" name="WeiXin" id="weiXin" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>QQ：</label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" value="@Model.QQ" name="QQ" id="qq" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label">
+                    <label>Email：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="@Model.Email" name="Email" id="email" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>固话：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="@Model.Telephone" name="Telephone" id="telephone" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>地址：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" style="width:1000px" value="@Model.Address" name="Address" id="address" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label">
+                    <label>等级：</label>
+                </div>
+                <div class="field">
+                    <input type="number" class="input w50" value="@Model.Level" name="Level" id="level" />
+                    <div style="padding-top:10px;color:red;">等级为0是普通商家；等级为1是金牌商家</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label></label>
+                </div>
+                <div class="field">
+                    <a class="button border-main icon-backward" href="PropagandaUser"> 返回</a>
+                    <button class="button bg-main icon-check-square-o" type="submit"> 提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/BDueditor/ueditor.config.js"></script>
+    <script src="~/Content/BDueditor/ueditor.all.js"></script>
+    <script src="~/Content/BDueditor/zh-cn.js"></script>
+    <script>
+        var _cname = '';
+        BindCategory();
+        
+    function BindCategory() {
+        $.ajax({
+            url: 'AjaxGetPropagandaArea',
+            type: 'post',
+            dataType: 'json',
+            success: function (r) {
+                if (r.status == 1) {
+                    var _html = '<option value="0">请选择分类</option>';
+                    for (var i = 0; i < r.data.length; i++) {
+                        _html += '<option value="' + r.data[i].Id + '">' + r.data[i].Name + '</option>';
+                    }
+                    $("#_area").html(_html);
+                    $("#_area").val('@Model.Area_Id');
+                }
+            }
+        });
+    }
+
+    function ShowUploadingImg() {
+        docObj = document.getElementById("photo");
+        if (docObj.files) {
+            var _img = window.URL.createObjectURL(docObj.files[0]);
+            $("#url1").attr("data-image", _img);
+            $("#url1").val(docObj.files[0].name);
+        }
+    }
+
+    function SetAid() {
+        $("#_aid").val($("#_area").val());
+        //$("#_area").val($("#_area option:selected").html());
+    }
+    </script>
+}

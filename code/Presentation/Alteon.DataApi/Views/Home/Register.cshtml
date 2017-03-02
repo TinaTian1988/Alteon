@@ -1,0 +1,210 @@
+﻿@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>ALTEON 耀腾智能机电监控云平台 - 注册</title>
+    <meta name="keywords" content="智能,监控,云平台,机电,耀腾,太阳能发电,BAS,BA,气体监控">
+    <meta name="description" content="
+          耀腾智能机电监控云平台是一个完全响应式，基于云端最新版本开发的工业机电监控系统，采用了modbus、tcp等传输协议方式与现场PLC系统对接，同时运行在pc和移动终端">
+
+    <link href="/Content/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="/Content/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="/Content/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/Content/css/animate.min.css" rel="stylesheet">
+    <link href="/Content/css/style.min.css?v=3.0.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="ibox-content" id="animation_box" style="visibility:hidden;padding-top:10px;">
+        <div id="errorMsg" class="alert alert-danger alert-dismissable" style="text-align:center">
+            H+是一个很棒的后台UI框架
+        </div>
+    </div>
+    <div class="middle-box text-center loginscreen   animated fadeInDown">
+        <div>
+            <div>
+                <h1 class="logo-name">Alteon</h1>
+            </div>
+            <h3>欢迎注册 耀腾智能机电监控云平台</h3>
+            <p>创建一个Alteon新账户</p>
+            <form class="m-t" role="form" action="login.html">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="userkey" placeholder="请输入userkey" onblur="CheckUserkey(this)" required="">
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" name="Mobile" placeholder="请输入手机号码" onblur="CheckMobile(this)" required="">
+                </div>
+                <div class="form-group">
+                    <input id="psd" type="password" class="form-control" placeholder="请输入密码" onblur="CheckPsd1(this)" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" name="Password" placeholder="请再次输入密码" onblur="CheckPsd2(this)" required="">
+                </div>
+                <div class="form-group text-left">
+                    <div class="checkbox i-checks">
+                        <label class="no-padding">
+                            <input id="isAgree" type="checkbox"><i></i> 我同意注册协议  <a target="_blank" href="/UserContract.html">用户协议</a>
+                        </label>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary block full-width m-b" onclick="Register()">注 册</button>
+
+                <p class="text-muted text-center">
+                    <small>已经有账户了？</small><a href="login">点此登录</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- 全局js -->
+    <script src="~/Content/js/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <!-- iCheck -->
+    <script src="~/Content/js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        var _isValid = false;
+        var _userKey;
+        var _phone = "";
+        var _password = "";
+        
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+            $(document).keyup(function (event) {
+                if (event.keyCode == 13) {
+                    Register();
+                }
+            });
+
+            function CheckUserkey(a) {
+                $.ajax({
+                    url: "CheckUserKey",
+                    type: "post",
+                    data: { userkey: $(a).val().trim() },
+                    dataType: "json",
+                    success: function (d) {
+                        if (d.Error == 0) {
+                            _userKey = $(a).val().trim();
+                            _isValid = true;
+                        }
+                        else {
+                            _isValid = false;
+                            $("#animation_box").attr("style", "visibility:visible;padding-top:10px;");
+                            $("#errorMsg").text(d.Msg);
+                            $("#animation_box").addClass("ibox-content animated shake");
+                        }
+                    }
+                });
+            }
+
+        function CheckMobile(a) {
+            var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+            if ($(a).val() != "" && !myreg.test($(a).val())) {
+                _isValid = false;
+                $("#animation_box").attr("style", "visibility:visible;padding-top:10px;");
+                $("#errorMsg").text("请输入正确的手机号码");
+                $("#animation_box").addClass("ibox-content animated shake");
+            }
+            else {
+                _phone = $(a).val();
+                _isValid = true;
+                $("#animation_box").attr("style", "visibility:hidden;padding-top:10px;");
+            }
+        }
+
+        function CheckPsd1(a) {
+            if ($(a).val() != "" && $(a).val().length < 8) {
+                _isValid = false;
+                $("#animation_box").attr("style", "visibility:visible;padding-top:10px;");
+                $("#errorMsg").text("密码不得少于8位");
+                $("#animation_box").addClass("ibox-content animated shake");
+            }
+            else {
+                _isValid = true;
+                $("#animation_box").attr("style", "visibility:hidden;padding-top:10px;");
+            }
+        }
+
+        function CheckPsd2(a) {
+            if ($(a).val() != "" && $(a).val() != $("#psd").val()) {
+                _isValid = false;
+                $("#animation_box").attr("style", "visibility:visible;padding-top:10px;");
+                $("#errorMsg").text("密码输入不一致");
+                $("#animation_box").addClass("ibox-content animated shake");
+            }
+            else {
+                _password = $(a).val();
+                _isValid = true;
+                $("#animation_box").attr("style", "visibility:hidden;padding-top:10px;");
+            }
+        }
+
+        function Register() {
+            var _ischeck = $("#isAgree").is(':checked');
+            //alert(_ischeck + "|" + _isValid + "|" + _userKey + "|" + _phone + "|" + _password);
+            if (_ischeck && _isValid && _userKey != "" && _phone != "" && _password != "") {
+                $.ajax({
+                    url: "RegisterPost",
+                    type: "post",
+                    dataType: "json",
+                    data: { userKey:_userKey, phone: _phone, password: _password },
+                    success: function (data) {
+                        if (data.Error == 0) {
+                            // 获取终端的相关信息
+                            var Terminal = {
+                                // 辨别移动终端类型
+                                platform: function () {
+                                    var u = navigator.userAgent, app = navigator.appVersion;
+                                    return {
+                                        // 是否为iPhone或者QQHD浏览器
+                                        iPhone: u.indexOf('iPhone') > -1,
+                                        // 是否iPad
+                                        iPad: u.indexOf('iPad') > -1,
+                                        // 是否微信
+                                        weixin: u.toLowerCase().indexOf("micromessenger") > -1,
+                                        // android终端或者uc浏览器
+                                        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1,
+                                        // 是否WinPhone
+                                        wp: u.indexOf('Windows Phone') > -1
+                                    };
+                                }(),
+                            }
+                            // 根据不同的终端，跳转到不同的地址
+                            if (Terminal.platform.weixin || Terminal.platform.wp || Terminal.platform.android || Terminal.platform.iPhone) {
+                                location.href = '/mobileweb/index';
+                            } else {
+                                location.href = '/usercenter/index';
+                            }
+                        }
+                        else {
+                            $("#animation_box").attr("style", "visibility:visible;padding-top:10px;");
+                            $("#errorMsg").text(data.Msg);
+                            $("#animation_box").addClass("ibox-content animated shake");
+                            alert(data.Msg);
+                        }
+                    },
+                    error: function (e) {
+                        alert("error: " + e);
+                    }
+                });
+            }
+        }
+
+        
+    </script>
+</body>
+</html>

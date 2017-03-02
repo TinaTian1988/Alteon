@@ -1,0 +1,16 @@
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\TcpServer.exe.config
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\TcpServer.exe.manifest
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\TcpServer.application
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\TcpServer.exe
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\TcpServer.pdb
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\Dapper.dll
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\DapperExtensions.dll
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\Newtonsoft.Json.dll
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\Dapper.pdb
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\Dapper.xml
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\DapperExtensions.pdb
+D:\temp\Alteon\Presentation\TcpServer\bin\Release\Newtonsoft.Json.xml
+D:\temp\Alteon\Presentation\TcpServer\obj\Release\TcpServer.exe.manifest
+D:\temp\Alteon\Presentation\TcpServer\obj\Release\TcpServer.application
+D:\temp\Alteon\Presentation\TcpServer\obj\Release\TcpServer.exe
+D:\temp\Alteon\Presentation\TcpServer\obj\Release\TcpServer.pdb

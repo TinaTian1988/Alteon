@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewBag.Title = "ElectricityChart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section iHead{
+    <link href="~/Content/css/plugins/light7/light7-swiper.min.css" rel="stylesheet" />
+    <link href="~/Content/css/plugins/light7/light7.min.css" rel="stylesheet" />
+    }
+
+<h5>@Request.QueryString["name"] @Request.QueryString["mark"] @Request.QueryString["markName"] 走势图</h5>
+<h6>单位：@Request.QueryString["unit"]</h6>
+<div class="page" style="z-index: 0; background-color: #fefde4">
+    <div class="content" style="margin-top: 70px;">
+        <div class="content-block" style="margin:0 0">
+            <div class="buttons-row">
+                <a href="#tab1" class="tab-link active button" onclick="SetFlag(this);">日</a>
+                <a href="#tab2" class="tab-link button" onclick="SetFlag(this);">月</a>
+                <a href="#tab3" class="tab-link button" onclick="SetFlag(this);">年</a>
+            </div>
+            <div class="buttons-row" style="margin:5% 10%;">
+                <span class="icon icon-left" onclick="SetTime(this);"></span>
+                <p id="_time" style="width: 80%; margin: 3px 3px 0 30px">2016-05-03</p>
+                <span class="icon icon-right" onclick="SetTime(this);"></span>
+            </div>
+        </div>
+        <div class="tabs">
+            <div id="tab1" class="tab active">
+                <div id="chart1"></div>
+            </div>
+            <div id="tab2" class="tab">
+                <div id="chart2"></div>
+            </div>
+            <div id="tab3" class="tab">
+                <div id="chart3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<div id="chart"></div>*@
+
+
+@section iScript{
+    <script src="~/Content/js/plugins/light7/light7-swiper.min.js"></script>
+    <script src="~/Content/js/plugins/light7/light7.min.js"></script>
+    <script src="~/Content/js/plugins/morris/morris.js"></script>
+    <script src="~/Content/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script>
+        var _time = new Date().toLocaleDateString().replace('/','-').replace('/','-');
+        var _flag = 1;
+
+        $(function () {
+            $("#_time").html(_time);
+            getData();
+        });
+
+        function SetFlag(o) {
+            if ($(o).attr("href") == '#tab1') {
+                _flag = 1;
+            }
+            if ($(o).attr("href") == '#tab2') {
+                _flag = 2;
+                getData();
+            }
+            if ($(o).attr("href") == '#tab3') {
+                _flag = 3;
+                getData();
+            }
+        }
+
+        function SetTime(o) {
+            if ($(o).attr("class") == 'icon icon-right') {
+                $.ajax({
+                    url: 'GetDate',
+                    data: { now: _time, flag: _flag, value: 1 },
+                    type: 'post',
+                    success: function (data) {
+                        _time = data;
+                        $("#_time").html(data);
+                        getData();
+                    }
+                });
+            }
+            if ($(o).attr("class") == 'icon icon-left') {
+                $.ajax({
+                    url: 'GetDate',
+                    data: { now: _time, flag: _flag, value: -1 },
+                    type: 'post',
+                    success: function (data) {
+                        _time = data;
+                        $("#_time").html(data);
+                        getData();
+                    }
+                });
+            }
+            
+        }
+
+        function getData() {
+            $("#chart"+_flag).children().remove();
+            $.ajax({
+                url: 'GetElectDataChart',
+                type: 'post',
+                data: { equipmentId: '@Request.QueryString["equipmentId"]', mark: '@Request.QueryString["mark"]', time: _time, flag: _flag },
+                success: function (data) {
+                    var _data = [];
+                    for (var i = 0; i < data.length; i++) {
+                        _data.push({
+                            time: data[i].time,
+                            value: data[i].value
+                        });
+                    }
+                    var _chart = "chart" + _flag;
+                    if (_flag == 1) {
+                        Morris.Line({
+                            element: _chart,
+                            data: _data,
+                            xkey: "time",
+                            ykeys: ["value"],
+                            resize: !0,
+                            lineWidth: 2,
+                            labels: ["Value"],
+                            lineColors: ["#1ab394"],
+                            pointSize: 0,
+
+                        });
+                    }
+                    else {
+                        Morris.Bar({
+                            element: _chart,
+                            data: _data,
+                            xkey: "time",
+                            ykeys: ["value"],
+                            //labels: ["A系列"],
+                            hideHover: "auto",
+                            resize: !0,
+                            barColors: ["#1ab394", ]
+                        });
+                    }
+                }
+            });
+        }
+
+        function ElectricChart() {
+
+        }
+    </script>
+}
+

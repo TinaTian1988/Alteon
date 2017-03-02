@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "PropagandaBanner";
+    Layout = "~/Areas/Administrator/Views/Shared/_AdminLayoutPage.cshtml";
+}
+
+<div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder"> Banner列表</strong></div>
+    <div class="padding border-bottom" onclick="ShowEdit();">
+        <a class="button border-yellow" href="javascript:void(0)"><span class="icon-plus-square-o"></span> 添加新的Banner</a>
+    </div>
+    <table id="target" class="table table-hover text-center"></table>
+</div>
+
+<div id="addNew" class="panel admin-panel margin-top" style="display:none">
+    <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span> 增加Banner</strong></div>
+    <form id="form" method="post" action="http://localhost:22320/API/AjaxUploadPropagandaBanner" enctype="multipart/form-data">
+        <div class="body-content">
+            <div class="form-x">
+                <div class="form-group">
+                    <div class="label">
+                        <label>图片：</label>
+                    </div>
+                    <div class="field">
+                        <input type="file" class="input w50" name="image" id="_image" value="" data-validate="required:请选择图片" />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>排序：</label>
+                    </div>
+                    <div class="field">
+                        <input type="number" class="input w50" name="sortIndex" id="_sortIndex" value="" data-validate="required:请输入序号" />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label></label>
+                    </div>
+                    <div class="field">
+                        <button id="edit" onclick="Edit()" class="button bg-main icon-check-square-o" type="button"> 提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts{
+    <script>
+        var _Id = 0;
+        GetData();
+        
+        function del(id) {
+            if (confirm("您确定要删除吗?")) {
+                $.ajax({
+                    url: 'AjaxDeletePropagandaBannerById',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { id: id },
+                    success: function (r) {
+                        if (r.Error == 0) {
+                            GetData();
+                        }
+                    }
+                });
+            }
+        }
+
+        function GetData() {
+            $.ajax({
+                url: 'AjaxGetPropagandaBanner',
+                type: 'post',
+                dataType: 'json',
+                success: function (r) {
+                    if (r.Error == 0) {
+                        var _html = '<tr><th width="5%">ID</th><th>图片</th><th>序号</th><th width="15%">操作</th></tr>';
+                        for (var i = 0; i < r.Data.length; i++) {
+                            _html += '<tr>';
+                            _html += '<td>' + r.Data[i].Id + '</td>';
+                            _html += '<td><img src="https://www.alteon.info' + r.Data[i].Url + '" style="width:120px;height:80px"/></td>';
+                            _html += '<td>' + r.Data[i].SortIndex + '</td>';
+                            _html += '<td>';
+                            _html += '<div class="button-group">';
+                            _html += '<a class="button border-red" href="javascript:void(0)" onclick="return del(' + r.Data[i].Id + ')"><span class="icon-trash-o"></span> 删除</a>';
+                            _html += '</div>';
+                            _html += '</td>';
+                            _html += '</tr>';
+                        }
+                        $("#target").html(_html);
+                    }
+                    else {
+                        //alert('暂无数据');
+                    }
+                }
+            });
+        }
+
+        function ShowEdit() {
+            $("#_image").val('');
+            $("#_sortIndex").val('');
+            $("#addNew").show();
+        }
+
+        function Edit() {
+            var _image = $("#_image").val();
+            var _sortIndex = $("#_sortIndex").val();
+            if (_image != '' && _image != null && _sortIndex != '') {
+                $("form").submit();
+                GetData();
+            }
+        }
+
+    </script>
+}

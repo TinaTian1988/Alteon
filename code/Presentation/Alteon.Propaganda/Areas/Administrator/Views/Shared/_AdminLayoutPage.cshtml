@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/administrator/css/pintuer.css" rel="stylesheet" />
+    <link href="~/Content/administrator/css/admin.css" rel="stylesheet" />
+    @RenderSection("style", false)
+</head>
+<body>
+    @RenderBody()
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Content/administrator/js/pintuer.js"></script>
+    @RenderSection("scripts", false)
+</body>
+</html>

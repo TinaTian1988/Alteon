@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--Declare page as mobile friendly -->
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
+    <!-- Declare page as iDevice WebApp friendly -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- iDevice WebApp Splash Screen, Regular Icon, iPhone, iPad, iPod Retina Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/content/images/splash/splash-icon.png">
+    <!-- iPhone 3, 3Gs -->
+    <link rel="apple-touch-startup-image" href="/content/images/splash/splash-screen.png" media="screen and (max-device-width: 320px)" />
+    <!-- iPhone 4 -->
+    <link rel="apple-touch-startup-image" href="/content/images/splash/splash-screen_402x.png" media="(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)" />
+    <!-- iPhone 5 -->
+    <link rel="apple-touch-startup-image" sizes="640x1096" href="/content/images/splash/splash-screen_403x.png" />
+
+    <!-- Page Title -->
+    <title>ALTEON 耀腾智能机电监控云平台</title>
+    <meta name="keywords" content="智能,监控,云平台,机电,耀腾,太阳能发电,BAS,BA,气体监控">
+    <meta name="description" content="
+          耀腾智能机电监控云平台是一个完全响应式，基于云端最新版本开发的工业机电监控系统，采用了modbus、tcp等传输协议方式与现场PLC系统对接，同时运行在pc和移动终端">
+
+    <!-- Stylesheet Load -->
+    <link href="/content/css/styles/style.css" rel="stylesheet" type="text/css">
+    <link href="/content/css/styles/framework-style.css" rel="stylesheet" type="text/css">
+    <link href="/content/css/styles/framework.css" rel="stylesheet" type="text/css">
+    <link href="/content/css/styles/bxslider.css" rel="stylesheet" type="text/css">
+    <link href="/content/css/styles/swipebox.css" rel="stylesheet" type="text/css">
+    <link href="/content/css/styles/icons.css" rel="stylesheet" type="text/css">
+    <link href="/content/css/styles/retina.css" rel="stylesheet" type="text/css" media="only screen and (-webkit-min-device-pixel-ratio: 2)" />
+    @*<link href="~/Content/css/plugins/light7/light7-swiper.min.css" rel="stylesheet" />
+    <link href="~/Content/css/plugins/light7/light7.min.css" rel="stylesheet" />*@
+
+    <!--Page Scripts Load -->
+    <script src="/Content/js/jquery-2.1.1.min.js"></script>
+    <script src="/Content/js/hammer.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery-ui-1.10.4.min.js"></script>
+    <script src="/Content/js/subscribe.js" type="text/javascript"></script>
+    <script src="/Content/js/contact.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery.swipebox.js" type="text/javascript"></script>
+    <script src="/Content/js/bxslider.js" type="text/javascript"></script>
+    @*<script src="/Content/js/colorbox.js" type="text/javascript"></script>*@
+    <script src="/Content/js/retina.js" type="text/javascript"></script>
+    <script src="/Content/js/custom.js" type="text/javascript"></script>
+    <script src="/Content/js/framework.js" type="text/javascript"></script>
+
+    @*<script src="~/Content/js/plugins/light7/light7-swiper.min.js"></script>
+    <script src="~/Content/js/plugins/light7/light7.min.js"></script>*@
+
+    @RenderSection("iHead", required: false)
+</head>
+<body>
+    <div class="cover" style="display:none" onclick="hidWindow()"></div>
+    <div id="preloader">
+        <div id="status">
+            <p class="center-text">
+                Loading the content...
+                <em>Loading depends on your connection speed!</em>
+            </p>
+        </div>
+    </div>
+
+    <div class="header">
+        <a class="logo-home external" href="javascript:history.back(-1);"><img src="/Content/images/back.png" alt="img" width="40"></a>
+        <div class="header-text" onclick="location.href='index'">
+            <strong>Alteon</strong>
+            <em>智能机电监控平台</em>
+        </div>
+    </div>
+    <div class="header-clear"></div>
+
+    <div class="content">
+        @RenderBody()
+    </div>
+
+    <div class="footer">
+        @*<div class="small-navigation-icons">
+            <a href="#" class="small-nav-icon facebook-nav"></a>
+            <a href="#" class="small-nav-icon go-up up-nav"></a>
+            <a href="#" class="small-nav-icon twitter-nav"></a>
+            <div class="clear"></div>
+        </div>*@
+        <p class="copyright"> Copyright © 2016 <a href="http://www.alteon.cn/" target="_blank">耀腾信息</a> All rights reserved.</p>
+    </div>
+    <script>
+        function showWindow() {
+            $(".cover").attr("style", "display:block");
+            $("#update").attr("style", "display:block");
+
+        }
+
+        function hidWindow() {
+            $(".cover").attr("style", "display:none");
+            $("#update").attr("style", "display:none");
+        }
+    </script>
+
+    @RenderSection("iScript", required: false)
+</body>
+</html>

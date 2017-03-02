@@ -1,0 +1,140 @@
+﻿@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>ALTEON 耀腾智能机电监控云平台 - 登录</title>
+    <meta name="keywords" content="智能,监控,云平台,机电,耀腾,太阳能发电,BAS,BA,气体监控">
+    <meta name="description" content="
+          耀腾智能机电监控云平台是一个完全响应式，基于云端最新版本开发的工业机电监控系统，采用了modbus、tcp等传输协议方式与现场PLC系统对接，同时运行在pc和移动终端">
+
+    <link href="/Content/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="/Content/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+
+    <link href="/Content/css/animate.min.css" rel="stylesheet">
+    <link href="/Content/css/style.min.css?v=3.0.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="ibox-content" id="animation_box" style="visibility:hidden;padding-top:10px;">
+        <div id="errorMsg" class="alert alert-danger alert-dismissable" style="text-align:center">
+            A+是一个很棒的后台UI框架
+        </div>
+    </div>
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name">Alteon</h1>
+
+            </div>
+            <h3>欢迎使用 耀腾智能机电监控云平台</h3>
+
+            <form class="m-t" role="form" action="index.html">
+                <div class="form-group">
+                    <input type="number" class="form-control" placeholder="用户名" onblur="CheckMobile(this)" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="psd" class="form-control" placeholder="密码" required="">
+                </div>
+                <button type="button" class="btn btn-primary block full-width m-b" onclick="Login()">登 录</button>
+
+
+                <p class="text-muted text-center">
+                    <a href="#"><small>忘记密码了？</small></a> | <a href="register">注册一个新账号</a>
+                </p>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="~/Content/js/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script>
+        var _isValid = true;
+        var _phone = "";
+
+        function CheckMobile(a) {
+            var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+            if ($(a).val() != "" && !myreg.test($(a).val())) {
+                _isValid = false;
+                $("#animation_box").attr("style", "visibility:visible;padding-top:10px;");
+                $("#errorMsg").text("请输入正确的手机号码");
+                $("#animation_box").addClass("ibox-content animated shake");
+            }
+            else {
+                _phone = $(a).val();
+                _isValid = true;
+                $("#animation_box").attr("style", "visibility:hidden;padding-top:10px;");
+            }
+        }
+
+        function Login() {
+            var _password = $("#psd").val();
+            if (_isValid && _phone != "" && _password != "") {
+                $.ajax({
+                    url: "LoginPost",
+                    type: "post",
+                    dataType: "json",
+                    data: { phone: _phone, password: _password },
+                    success: function (data) {
+                        if (data.Error == 0) {
+                            // 获取终端的相关信息
+                            var Terminal = {
+                                // 辨别移动终端类型
+                                platform: function () {
+                                    var u = navigator.userAgent, app = navigator.appVersion;
+                                    return {
+                                        // 是否为iPhone或者QQHD浏览器
+                                        iPhone: u.indexOf('iPhone') > -1,
+                                        // 是否iPad
+                                        iPad: u.indexOf('iPad') > -1,
+                                        // 是否微信
+                                        weixin: u.toLowerCase().indexOf("micromessenger") > -1,
+                                        // android终端或者uc浏览器
+                                        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1,
+                                        // 是否WinPhone
+                                        wp: u.indexOf('Windows Phone') > -1
+                                    };
+                                }(),
+                            }
+                            // 根据不同的终端，跳转到不同的地址
+                            if (Terminal.platform.weixin ||Terminal.platform.wp||Terminal.platform.android||Terminal.platform.iPhone) {
+                                location.href = '/mobileweb/index';
+                            } else {
+                                location.href = '/usercenter/index';
+                            }
+                        }
+                        else {
+                            $("#animation_box").attr("style", "visibility:visible;padding-top:10px;");
+                            $("#errorMsg").text(data.Msg);
+                            $("#animation_box").addClass("ibox-content animated shake");
+                        }
+                    },
+                    error: function (e) {
+                        alert("error: " + e);
+                    }
+                });
+            }
+        }
+
+        $(document).keyup(function (event) {
+            if (event.keyCode == 13) {
+                Login();
+            }
+        });
+    </script>
+</body>
+
+</html>

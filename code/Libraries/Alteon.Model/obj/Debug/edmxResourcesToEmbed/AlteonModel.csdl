@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="AlteonModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="AlteonModelContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Hqlk_Article" EntityType="AlteonModel.Hqlk_Article" />
+    <EntitySet Name="Hqlk_Banner" EntityType="AlteonModel.Hqlk_Banner" />
+    <EntitySet Name="Api_ClientOwner" EntityType="AlteonModel.Api_ClientOwner" />
+    <EntitySet Name="Api_ClientEquipment" EntityType="AlteonModel.Api_ClientEquipment" />
+    <EntitySet Name="Api_DataValue" EntityType="AlteonModel.Api_DataValue" />
+    <EntitySet Name="Api_EquipmentData" EntityType="AlteonModel.Api_EquipmentData" />
+    <EntitySet Name="Propaganda_AdverContent" EntityType="AlteonModel.Propaganda_AdverContent" />
+    <EntitySet Name="Propaganda_Advertising" EntityType="AlteonModel.Propaganda_Advertising" />
+    <EntitySet Name="Propaganda_User" EntityType="AlteonModel.Propaganda_User" />
+    <EntitySet Name="Propaganda_Article" EntityType="AlteonModel.Propaganda_Article" />
+    <EntitySet Name="Propaganda_ArticleCategory" EntityType="AlteonModel.Propaganda_ArticleCategory" />
+  </EntityContainer>
+  <EntityType Name="Hqlk_Article">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ImageUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Type" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SortingIndex" Type="Int32" />
+    <Property Name="IsIndexPageShow" Type="Int32" />
+    <Property Name="IsUse" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Hqlk_Banner">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="url" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="SortingIndex" Type="Int32" />
+    <Property Name="IsUse" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Api_ClientOwner">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Mobile" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+    <Property Name="Intro" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="Remark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="RegisterTime" Type="DateTime" Precision="3" />
+    <Property Name="UserIdentity" Type="Int32" />
+    <Property Name="Head" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Api_ClientEquipment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GateNo" Type="Int32" />
+    <Property Name="Owner_Id" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Intro" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Sorting" Type="Int32" />
+    <Property Name="IsControl" Type="Boolean" />
+    <Property Name="IsPublic" Type="Boolean" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="ConectTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="Api_DataValue">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EquipmentData_Id" Type="Int32" />
+    <Property Name="Value" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Api_EquipmentData">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EquipmentId" Type="Int32" Nullable="false" />
+    <Property Name="Mark" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="State" Type="Int32" />
+    <Property Name="NormalValue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="SortingIndex" Type="Int32" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="Method" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Unit" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="MoneyMethod" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="Propaganda_AdverContent">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Advertising_Id" Type="Int32" />
+    <Property Name="Content" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Propaganda_Advertising">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BusinessUser_Id" Type="Int32" />
+    <Property Name="Intro" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Type" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Propaganda_User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Account" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+    <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="QQ" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="WeiXin" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Telephone" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Style" Type="Int32" />
+    <Property Name="RegisterTime" Type="DateTime" Precision="3" />
+    <Property Name="State" Type="Int32" />
+    <Property Name="BusinessCard" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="HeadPortrait" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Comany" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Logo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Level" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Propaganda_Article">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Category_Id" Type="Int32" />
+    <Property Name="Title" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="SubTitle" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="Photo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Propaganda_ArticleCategory">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Sort" Type="Int32" />
+  </EntityType>
+</Schema>

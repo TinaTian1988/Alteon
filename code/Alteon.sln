@@ -1,0 +1,110 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alteon.Core", "Libraries\Alteon.Core\Alteon.Core.csproj", "{BD0D2593-54D4-4280-A50A-344D0EEE3EA4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{5D5B1995-EA68-4BFA-B1C9-76CA6B24870F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alteon.Data", "Libraries\Alteon.Data\Alteon.Data.csproj", "{E163C810-4AE0-47F2-B979-B456383EFEC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alteon.Model", "Libraries\Alteon.Model\Alteon.Model.csproj", "{3E87A0D1-6314-4666-9E27-686C2BD58D78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alteon.Services", "Libraries\Alteon.Services\Alteon.Services.csproj", "{48E38762-88C2-4F0E-A308-C0F1741FE4B5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{7A8CF099-2295-4BF9-8BCF-5449FD1838DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alteon.Web.Framework", "Libraries\Alteon.Web.Framework\Alteon.Web.Framework.csproj", "{3FE30048-F614-4150-B309-45A61A65A81D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alteon.DataApi", "Presentation\Alteon.DataApi\Alteon.DataApi.csproj", "{DADDF639-CE05-4381-9BAC-681593D59FDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alteon.Web", "Presentation\Alteon.Web\Alteon.Web.csproj", "{4DC62C7A-F05B-4A68-BDCC-AD395E496B25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D0805B9B-FBC1-4941-8880-D4B7FD6AB5A7}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpServer", "Presentation\TcpServer\TcpServer.csproj", "{66505C79-9192-4413-AC83-54558BDF77F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "Presentation\test\test.csproj", "{C1F63B15-24BB-41BE-A2A4-5482FB26431E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alteon.Propaganda", "Presentation\Alteon.Propaganda\Alteon.Propaganda.csproj", "{AA0ECA24-E5FF-42D4-A54F-337B61E031A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alteon.API", "Presentation\Alteon.API\Alteon.API.csproj", "{19B9A085-314B-415C-89F1-BDF193B8486E}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD0D2593-54D4-4280-A50A-344D0EEE3EA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD0D2593-54D4-4280-A50A-344D0EEE3EA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD0D2593-54D4-4280-A50A-344D0EEE3EA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD0D2593-54D4-4280-A50A-344D0EEE3EA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E163C810-4AE0-47F2-B979-B456383EFEC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E163C810-4AE0-47F2-B979-B456383EFEC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E163C810-4AE0-47F2-B979-B456383EFEC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E163C810-4AE0-47F2-B979-B456383EFEC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E87A0D1-6314-4666-9E27-686C2BD58D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E87A0D1-6314-4666-9E27-686C2BD58D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E87A0D1-6314-4666-9E27-686C2BD58D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E87A0D1-6314-4666-9E27-686C2BD58D78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48E38762-88C2-4F0E-A308-C0F1741FE4B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48E38762-88C2-4F0E-A308-C0F1741FE4B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48E38762-88C2-4F0E-A308-C0F1741FE4B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48E38762-88C2-4F0E-A308-C0F1741FE4B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FE30048-F614-4150-B309-45A61A65A81D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FE30048-F614-4150-B309-45A61A65A81D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FE30048-F614-4150-B309-45A61A65A81D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FE30048-F614-4150-B309-45A61A65A81D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DADDF639-CE05-4381-9BAC-681593D59FDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DADDF639-CE05-4381-9BAC-681593D59FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DADDF639-CE05-4381-9BAC-681593D59FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DADDF639-CE05-4381-9BAC-681593D59FDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DC62C7A-F05B-4A68-BDCC-AD395E496B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DC62C7A-F05B-4A68-BDCC-AD395E496B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DC62C7A-F05B-4A68-BDCC-AD395E496B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DC62C7A-F05B-4A68-BDCC-AD395E496B25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66505C79-9192-4413-AC83-54558BDF77F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66505C79-9192-4413-AC83-54558BDF77F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66505C79-9192-4413-AC83-54558BDF77F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66505C79-9192-4413-AC83-54558BDF77F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1F63B15-24BB-41BE-A2A4-5482FB26431E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1F63B15-24BB-41BE-A2A4-5482FB26431E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1F63B15-24BB-41BE-A2A4-5482FB26431E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1F63B15-24BB-41BE-A2A4-5482FB26431E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA0ECA24-E5FF-42D4-A54F-337B61E031A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA0ECA24-E5FF-42D4-A54F-337B61E031A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA0ECA24-E5FF-42D4-A54F-337B61E031A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA0ECA24-E5FF-42D4-A54F-337B61E031A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19B9A085-314B-415C-89F1-BDF193B8486E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19B9A085-314B-415C-89F1-BDF193B8486E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19B9A085-314B-415C-89F1-BDF193B8486E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19B9A085-314B-415C-89F1-BDF193B8486E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BD0D2593-54D4-4280-A50A-344D0EEE3EA4} = {5D5B1995-EA68-4BFA-B1C9-76CA6B24870F}
+		{E163C810-4AE0-47F2-B979-B456383EFEC4} = {5D5B1995-EA68-4BFA-B1C9-76CA6B24870F}
+		{3E87A0D1-6314-4666-9E27-686C2BD58D78} = {5D5B1995-EA68-4BFA-B1C9-76CA6B24870F}
+		{48E38762-88C2-4F0E-A308-C0F1741FE4B5} = {5D5B1995-EA68-4BFA-B1C9-76CA6B24870F}
+		{3FE30048-F614-4150-B309-45A61A65A81D} = {5D5B1995-EA68-4BFA-B1C9-76CA6B24870F}
+		{DADDF639-CE05-4381-9BAC-681593D59FDC} = {7A8CF099-2295-4BF9-8BCF-5449FD1838DE}
+		{4DC62C7A-F05B-4A68-BDCC-AD395E496B25} = {7A8CF099-2295-4BF9-8BCF-5449FD1838DE}
+		{66505C79-9192-4413-AC83-54558BDF77F2} = {7A8CF099-2295-4BF9-8BCF-5449FD1838DE}
+		{C1F63B15-24BB-41BE-A2A4-5482FB26431E} = {7A8CF099-2295-4BF9-8BCF-5449FD1838DE}
+		{AA0ECA24-E5FF-42D4-A54F-337B61E031A1} = {7A8CF099-2295-4BF9-8BCF-5449FD1838DE}
+		{19B9A085-314B-415C-89F1-BDF193B8486E} = {7A8CF099-2295-4BF9-8BCF-5449FD1838DE}
+	EndGlobalSection
+EndGlobal

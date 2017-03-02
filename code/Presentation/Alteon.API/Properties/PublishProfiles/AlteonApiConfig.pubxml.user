@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+您 Web 项目的发布/打包进程将使用此文件。您可以通过编辑此 MSBuild 文件
+来自定义该进程的行为。若要了解与此相关的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=208121。
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>D:\PubWebSite</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/Alteon.API.dll">
+      <publishTime>02/15/2017 19:15:24</publishTime>
+    </File>
+    <File Include="bin/Alteon.Core.dll">
+      <publishTime>02/15/2017 19:15:14</publishTime>
+    </File>
+    <File Include="bin/Alteon.Data.dll">
+      <publishTime>02/15/2017 19:15:17</publishTime>
+    </File>
+    <File Include="bin/Alteon.Model.dll">
+      <publishTime>02/15/2017 19:15:18</publishTime>
+    </File>
+    <File Include="bin/Alteon.Services.dll">
+      <publishTime>02/15/2017 19:15:22</publishTime>
+    </File>
+    <File Include="bin/Alteon.Web.Framework.dll">
+      <publishTime>02/15/2017 19:15:19</publishTime>
+    </File>
+    <File Include="bin/Autofac.dll">
+      <publishTime>01/22/2017 10:46:24</publishTime>
+    </File>
+    <File Include="bin/Autofac.Integration.Mvc.dll">
+      <publishTime>01/22/2017 10:46:21</publishTime>
+    </File>
+    <File Include="bin/Dapper.dll">
+      <publishTime>01/22/2017 10:46:54</publishTime>
+    </File>
+    <File Include="bin/DapperExtensions.dll">
+      <publishTime>01/22/2017 10:46:51</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>01/22/2017 10:47:05</publishTime>
+    </File>
+    <File Include="bin/ICSharpCode.SharpZipLib.dll">
+      <publishTime>01/22/2017 10:46:47</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>01/22/2017 10:46:22</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>01/22/2017 10:46:23</publishTime>
+    </File>
+    <File Include="bin/NPOI.dll">
+      <publishTime>01/22/2017 10:46:47</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>02/13/2017 11:11:02</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>01/22/2017 10:46:22</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>02/13/2017 11:11:02</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>02/13/2017 11:11:03</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.dll">
+      <publishTime>01/22/2017 10:46:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>01/22/2017 10:46:21</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Deployment.dll">
+      <publishTime>01/22/2017 10:46:22</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.dll">
+      <publishTime>01/22/2017 10:46:22</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Razor.dll">
+      <publishTime>01/22/2017 10:46:22</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/EntityFramework.resources.dll">
+      <publishTime>01/22/2017 10:47:05</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Net.Http.Formatting.resources.dll">
+      <publishTime>02/13/2017 11:11:04</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Helpers.resources.dll">
+      <publishTime>01/22/2017 10:47:12</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Http.resources.dll">
+      <publishTime>02/13/2017 11:11:04</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Http.WebHost.resources.dll">
+      <publishTime>02/13/2017 11:11:05</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Mvc.resources.dll">
+      <publishTime>01/22/2017 10:47:12</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.Razor.resources.dll">
+      <publishTime>01/22/2017 10:47:12</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.WebPages.Deployment.resources.dll">
+      <publishTime>01/22/2017 10:47:12</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.WebPages.Razor.resources.dll">
+      <publishTime>01/22/2017 10:47:12</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Web.WebPages.resources.dll">
+      <publishTime>01/22/2017 10:47:12</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>01/19/2017 15:44:42</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>02/13/2017 11:11:05</publishTime>
+    </File>
+    <File Include="Views/web.config">
+      <publishTime>01/19/2017 15:44:42</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>02/15/2017 19:15:26</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

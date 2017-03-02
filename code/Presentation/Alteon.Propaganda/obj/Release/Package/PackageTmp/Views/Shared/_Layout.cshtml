@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="~/Content/css/myCss.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    @RenderSection("head",false)
+</head>
+<body>
+    <div id="myAlert" class="alert alert-warning" style="display:none">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        @*<strong>警告！</strong>*@
+        您的网络连接有问题。
+    </div>
+    @RenderBody()
+    
+   
+    
+    <script>
+        function tip(_message) {
+            $(".alert").html('<a href="#" class="close" data-dismiss="alert">&times;</a>' + _message);
+            $(".alert").fadeIn();
+            setInterval(function () {
+                $(".alert").fadeOut();
+                clearInterval();
+            }, 3000);
+        }
+    </script>
+    @RenderSection("body",false)
+</body>
+</html>

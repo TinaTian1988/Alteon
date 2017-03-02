@@ -1,0 +1,274 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ALTEON 耀腾智能机电监控云平台 - 历史数据查询</title>
+    <meta name="keywords" content="智能,监控,云平台,机电,耀腾,太阳能发电,BAS,BA,气体监控">
+    <meta name="description" content="
+          耀腾智能机电监控云平台是一个完全响应式，基于云端最新版本开发的工业机电监控系统，采用了modbus、tcp等传输协议方式与现场PLC系统对接，同时运行在pc和移动终端">
+    <link href="/Content/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="/Content/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="/Content/css/animate.min.css" rel="stylesheet">
+    <link href="/Content/css/style.min.css?v=3.0.0" rel="stylesheet">
+    <link href="~/Content/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <style>
+        .choose {
+            display: inline-block;
+            margin-left: 1%;
+        }
+    </style>
+</head>
+<body class="gray-bg" style="margin-left:1%;margin-right:1%">
+    <div class="choose">
+        @if (ViewData["equipments"] != null)
+        {
+            var list = (List<Alteon.Model.Api.Extension.Equipment>)ViewData["equipments"];
+            <select class="form-control m-b" id="equipments">
+                <option value="0">--请选择设备--</option>
+                @foreach (var item in list)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+        }
+    </div>
+    <div class="choose">
+        <select class="form-control m-b" id="datas">
+            <option value="0">--请选择数据--</option>
+        </select>
+    </div>
+    <div class="form-group" style="display:none">
+        <label class="col-sm-2 control-label">外部js调用：</label>
+        <div class="col-sm-10">
+            <input id="hello" class="laydate-icon form-control layer-date">
+        </div>
+    </div>
+    <div class="choose" style="width:10%">
+        <input placeholder="开始日期" class="form-control layer-date" id="start" style="margin-top:-9px;">
+    </div>-
+    <div class="choose" style="width:10%">
+        <input placeholder="结束日期" class="form-control layer-date" id="end" style="margin-top: -9px;">
+    </div>
+    <div class="choose" style="width:8%">
+        <input type="text" id="beginValue" class="form-control" placeholder="开始数值">
+    </div>-
+    <div class="choose" style="width:8%">
+        <input type="text" id="endValue" class="form-control" placeholder="结束数值">
+    </div>
+    <div class="choose">
+        <button id="search" type="button" class="btn btn-primary">查询</button>
+    </div>
+    <div class="ibox-content" style="margin-left:0.5%;">
+        @*<div class="">
+                <a data-toggle="modal" class="btn btn-primary" href="/usercenter/equipmentlist">返回</a>
+            </div>*@
+        <table id="equipmentList" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+                <tr>
+                    @*<th>排序</th>*@
+                    @*<th>设备</th>*@
+                    <th>标识</th>
+                    <th>名称</th>
+                    <th>数值</th>
+                    <th>单位</th>
+                    <th>时间</th>
+                    @*<th>查看图表</th>*@
+                    <th>删除</th>
+                </tr>
+            </thead>
+            <tbody id="ajaxData">
+                @*异步加载数据*@
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 全局js -->
+    <script src="~/Content/js/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js?v=3.4.0"></script>
+    <!-- Data Tables -->
+    <script src="/Content/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="/Content/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script>
+        var page = { pageIndex: 1, pageSize: 15, totalCount: 0, startNum: 0, endNum: 0, totalPage: 0 };
+        var _equipmentId;
+        var _mark;
+        var _beginTime;
+        var _endTime;
+        var _beginValue;
+        var _endValue;
+
+        $(document).ready(function () {
+            $("#equipmentList").dataTable({
+                "bLengthChange": false,//每页显示多少数据
+                "bFilter": false, //过滤功能（查询）
+                "ordering":false//禁用排序
+            });
+            
+            $("#equipmentList_next").unbind();
+            $("#equipmentList_previous").unbind();
+            $("#equipmentList_next").click(function () {
+                page.pageIndex++;
+                AjaxLoadList();
+            });
+            $("#equipmentList_previous").click(function () {
+                page.pageIndex--;
+                AjaxLoadList();
+            });
+            
+            $('#equipments').change(function () {
+                _equipmentId = $(this).children('option:selected').val();
+                if (_equipmentId > 0) {
+                    $.ajax({
+                        url: "GetDataListByEquipmentId",
+                        data: { euipmentId: _equipmentId },
+                        dataType: "json",
+                        type: "post",
+                        success: function (d) {
+                            if (d.Error == 0) {
+                                var _data = d.Data;
+                                var _html = '<option value="0">--请选择数据--</option>';
+                                for (var i = 0; i < _data.length; i++) {
+                                    _html += '<option value="' + _data[i].Mark + '">' + _data[i].Mark + '--' + _data[i].Name + '</option>';
+                                }
+                                $("#datas").html(_html);
+                            }
+                            else {
+                                alert("该设备暂无数据");
+                            }
+                        }
+                    });
+                }
+            });
+
+            $("#datas").change(function () {
+                _mark = $(this).children('option:selected').val();
+            });
+
+            $("#search").click(function () {
+                if (_mark == "" || _equipmentId == "") {
+                    return;
+                }
+
+                _beginValue = $("#beginValue").val().trim();
+                _endValue = $("#endValue").val().trim();
+                if (isNaN(_beginValue)){
+                    alert("数据范围中，请填写数字");
+                }
+                if (isNaN(_endValue)) {
+                    alert("数据范围中，请填写数字");
+                }
+                page.pageIndex = 1;
+                AjaxLoadList();
+            });
+        });
+        
+
+        function AjaxLoadList() {
+            $.ajax({
+                url: "GetAllDataByEquipmentIdAndMark",
+                data: { equipmentId: _equipmentId, mark: _mark, beginTime: _beginTime, endTime: _endTime, beginValue: _beginValue, endValue: _endValue, pageIndex: page.pageIndex, pageSize: page.pageSize },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        var obj = data.Data;
+                        var html = "";
+                        for (var i = 0; i < obj.length; i++) {
+                            html += "<tr class='gradeA'><td>" + obj[i].Mark + "</td><td>" + obj[i].Name + "</td><td>" + obj[i].Value + "</td><td>" + obj[i].Unit + "</td><td>" + obj[i].CreateTime + "</td><td><a href='#' onclick='DeleteData("+obj[i].Id+")'>删除</a></td></tr>";
+                        }
+                        $("#ajaxData").html(html);
+                        page.totalCount = parseInt(data.Msg);
+                        page.startNum = (page.pageIndex - 1) * page.pageSize + 1;
+                        page.endNum = page.pageIndex * page.pageSize;
+                        if (page.endNum > page.totalCount)
+                            page.endNum = page.totalCount;
+                        page.totalPage = Math.ceil(page.totalCount / page.pageSize);
+                        $("#equipmentList_info").text("显示 " + page.startNum + " 到 " + page.endNum + " 项，共 " + page.totalCount + " 项");
+                        if (page.pageIndex == 1) {
+                            $("#equipmentList_previous").addClass("disabled");
+                        }
+                        else {
+                            $("#equipmentList_previous").removeClass("disabled");
+                        }
+                        if (page.pageIndex == page.totalPage) {
+                            $("#equipmentList_next").addClass("disabled");
+                        }
+                        else {
+                            $("#equipmentList_next").removeClass("disabled");
+                        }
+
+                    }
+                    else {
+                        $("#ajaxData").html("<tr class='odd'><td valign='top' colspan='6' class='dataTables_empty'>没有数据</td></tr>");
+                        $("#equipmentList_info").text("共 0 项");
+                        $("#equipmentList_next").addClass("disabled");
+                    }
+                },
+                error: function (e) {
+                    alert(e.error);
+                }
+            });
+        }
+
+        function DeleteData(_id) {
+            $.ajax({
+                url: "DeleteDataById",
+                data: { id:_id },
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data.Error == 0) {
+                        AjaxLoadList();
+                    }
+                    else {
+                        alert(data.Msg);
+                    }
+                },
+                error: function (e) {
+                    alert(e.error);
+                }
+            });
+        }
+
+    </script>
+    <script src="~/Content/js/plugins/layer/laydate/laydate.js"></script>
+    <script>
+        laydate({
+            elem: "#hello",
+            event: "focus"
+        });
+        var start = {
+            elem: "#start",
+            event: 'focus',
+            format: "YYYY-MM-DD hh:mm:ss",
+            min: "2000-01-01 00:00:00",
+            max: "2099-06-16 23:59:59",
+            istime: true,
+            istoday: false,
+            choose: function (datas) {
+                end.min = datas;
+                end.start = datas
+                _beginTime = datas;
+            }
+        };
+        var end = {
+            elem: "#end",
+            event: 'focus',
+            format: "YYYY-MM-DD hh:mm:ss",
+            min: "2000-01-01 00:00:00",
+            max: "2099-06-16 23:59:59",
+            istime: true,
+            istoday: false,
+            choose: function (datas) {
+                start.max = datas
+                _endTime = datas;
+            }
+        };
+        laydate(start);
+        laydate(end);
+
+
+    </script>
+</body>
+</html>

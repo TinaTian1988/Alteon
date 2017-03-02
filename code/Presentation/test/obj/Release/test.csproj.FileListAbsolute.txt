@@ -1,0 +1,9 @@
+D:\temp\Alteon\Presentation\test\bin\Release\test.exe.config
+D:\temp\Alteon\Presentation\test\bin\Release\test.exe
+D:\temp\Alteon\Presentation\test\bin\Release\test.pdb
+D:\temp\Alteon\Presentation\test\bin\Release\StackExchange.Redis.dll
+D:\temp\Alteon\Presentation\test\bin\Release\StackExchange.Redis.pdb
+D:\temp\Alteon\Presentation\test\bin\Release\StackExchange.Redis.xml
+D:\temp\Alteon\Presentation\test\obj\Release\test.csprojResolveAssemblyReference.cache
+D:\temp\Alteon\Presentation\test\obj\Release\test.exe
+D:\temp\Alteon\Presentation\test\obj\Release\test.pdb
